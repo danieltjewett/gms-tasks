@@ -1,0 +1,49 @@
+{
+  "export-gm-sprites-as-strips":{
+    "spriteDirectory": "./sprites/",
+    "exportDirectory": "./exported-sprites/"
+  },
+  "generate-map":{
+    "imagesDirectory": "./map-images/",
+    "outputDirectory": "./map/",
+    "finalWidth": 960,
+    "finalHeight": 960
+  },
+  "make-gm-sprites-from-strips":{
+    "grid": 32,
+    "animations": {
+      "Walk_Up": {
+        "index": 8,
+        "frames": 9
+      },
+      "Walk_Left": {
+        "index": 9,
+        "frames": 9
+      },
+      "Walk_Down": {
+        "index": 10,
+        "frames": 9
+      },
+      "Walk_Right": {
+        "index": 11,
+        "frames": 9
+      },
+      "Death": {
+        "index": 20,
+        "frames": 6
+      },
+      "Hurt": {
+        "index": 20,
+        "frames": 3
+      },
+      "Unhurt": {
+        "index": 20,
+        "frames": 3,
+        "reverse": true
+      }
+    },
+    "prefixStr": "NPC_",
+    "stripDirectory": "./strips/",
+    "outputDirectory": "./yy/"
+  }
+}
