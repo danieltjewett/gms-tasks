@@ -1,10 +1,10 @@
 {
   "export-gm-sprites-as-strips":{
     "spriteDirectory": "./sprites/",
-    "exportDirectory": "./exported-sprites/"
+    "exportDirectory": "./exported-strips/"
   },
   "generate-map":{
-    "imagesDirectory": "./map-images/",
+    "imagesDirectory": "../../AppData/Local/violetthegame/map-images/",
     "outputDirectory": "./map/",
     "finalWidth": 960,
     "finalHeight": 960
@@ -42,7 +42,7 @@
         "reverse": true
       }
     },
-    "prefixStr": "NPC_",
+    "prefixStr": "spr_NPC_",
     "stripDirectory": "./strips/",
     "outputDirectory": "./yy/"
   }

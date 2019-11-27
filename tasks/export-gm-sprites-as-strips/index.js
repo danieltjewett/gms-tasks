@@ -12,11 +12,11 @@ var config = JSON.parse(fs.readFileSync(configPath))[scriptName];
 log("Starting `" + scriptName + "`");
 var time = new Date();
 
-exportImages(function(){
+start(function(){
   log("Finished `" + scriptName + "` after", (((new Date()) - time) / 1000), "seconds");
 });
 
-function exportImages(callback)
+function start(callback)
 {
   var pattern = [
     config.spriteDirectory + "*/*.yy"
@@ -24,6 +24,7 @@ function exportImages(callback)
   
   log("importing", pattern);
   
+  //most likely, get all the sprites in the sprites directory
   return globby(pattern).then(function(paths){
     var allExports = [];
     
@@ -40,25 +41,32 @@ function exportImages(callback)
   });
 }
 
+//exports a path of a sprite into a strip
 function exportImage(path)
 {
   log("exporting", path);
   
   return new Promise(function(resolve, reject) {
+    //get the yy data
     var data = JSON.parse(fs.readFileSync(path));
     
     var width = data.width;
     var height = data.height;
     var frameLength = data.frames.length;
     
+    //returns the path of the image, without the file name
     var imagePath = path.substring(0, path.lastIndexOf("/")) + "/";
     
+    //returns the file name with the yy
     var fileNameYY = path.split('\\').pop().split('/').pop();
+    
+    //returns the file name without the yy
     var fileName = fileNameYY.substring(0, fileNameYY.lastIndexOf("."));
     
     new jimp(data.width * frameLength, height, function(err, image) {
       var promises = [];
       
+      //loops through each frame's image and copies to the main image
       for (var i=0; i<frameLength; i++)
       {
         var imageName = data.frames[i].id + ".png";
@@ -76,6 +84,7 @@ function exportImage(path)
   });
 }
 
+//copies an image into a subimage, or frame of the strip
 function copyImage(imagePath, imageName, image, width, index)
 {
   return jimp.read(imagePath + imageName).then(function(frameImage) {

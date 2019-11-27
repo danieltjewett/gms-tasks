@@ -1,20 +1,20 @@
 {
   "name": "gms-tasks",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Adds some command line tasks for repetitive actions for Game Maker Studio 2.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "export-gm-sprites-as-strips": "node tasks/export-gm-sprites-as-strips/index.js",
-    "generate-map": "node tasks/generate-map/index.js",
-    "make-gm-sprites-from-strips": "node tasks/make-gm-sprites-from-strips/index.js"
+    "export-gm-sprites-as-strips": "node tasks/export-gm-sprites-as-strips/index.js ./gms-tasks-config.json",
+    "generate-map": "node tasks/generate-map/index.js ./gms-tasks-config.json",
+    "make-gm-sprites-from-strips": "node tasks/make-gm-sprites-from-strips/index.js ./gms-tasks-config.json"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danieltjewett/gms-tasks.git"
   },
   "author": "Dan Jewett",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/danieltjewett/gms-tasks/issues"
   },
