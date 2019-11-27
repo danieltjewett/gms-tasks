@@ -1,15 +1,15 @@
 {
-  "export-gm-sprites-as-strips":{
+  "export-gm-sprites-as-strips": {
     "spriteDirectory": "./sprites/",
     "exportDirectory": "./exported-strips/"
   },
-  "generate-map":{
+  "generate-map": {
     "imagesDirectory": "../../AppData/Local/violetthegame/map-images/",
     "outputDirectory": "./map/",
     "finalWidth": 960,
     "finalHeight": 960
   },
-  "make-gm-sprites-from-strips":{
+  "make-gm-sprites-from-strips": {
     "grid": 32,
     "animations": {
       "Walk_Up": {
@@ -45,5 +45,24 @@
     "prefixStr": "spr_NPC_",
     "stripDirectory": "./strips/",
     "outputDirectory": "./yy/"
+  },
+  "build-clean-snap": {
+    "roomDir": "./rooms/",
+    "exportRoom": "room_Kickstarter",
+    "instanceCreationOrderId_InsertAt": 7,
+    "layerToInsertName": "instances"
+  },
+  "clean": {},
+  "build": {
+    "ignoreRoomsBuild": [
+      "room_Kick_",
+      "room_Kick_Temp"
+    ]
+  },
+  "snap": {
+    "ignoreRoomsSnap": [
+      "room_Opening",
+      "room_parent"
+    ]
   }
 }
