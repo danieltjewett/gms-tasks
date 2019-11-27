@@ -1,25 +1,24 @@
 {
-  "name": "map-generator",
-  "version": "1.0.0",
-  "description": "Generates an image from a series of images.",
+  "name": "gms-tasks",
+  "version": "0.0.2",
+  "description": "Adds some command line tasks for repetitive actions for Game Maker Studio 2.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "export-gm-sprites-as-strips": "node tasks/export-gm-sprites-as-strips/index.js",
+    "generate-map": "node tasks/generate-map/index.js",
+    "make-gm-sprites-from-strips": "node tasks/make-gm-sprites-from-strips/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danieltjewett/violetthegame.git"
+    "url": "git+https://github.com/danieltjewett/gms-tasks.git"
   },
   "author": "Dan Jewett",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danieltjewett/violetthegame/issues"
+    "url": "https://github.com/danieltjewett/gms-tasks/issues"
   },
-  "homepage": "https://github.com/danieltjewett/violetthegame#readme",
-  "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-hub": "^4.2.0"
-  },
+  "homepage": "https://github.com/danieltjewett/gms-tasks#readme",
   "dependencies": {
     "fancy-log": "^1.3.3",
     "globby": "^9.1.0",

@@ -1,13 +1,19 @@
-var gulp = require('gulp');
 var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 var jimp = require('jimp');
 
-var config = JSON.parse(fs.readFileSync('./gms-gulp-tasks-config.json'))['export-gm-sprites-as-strips'];
+var args = process.argv.splice(process.execArgv.length + 2);
+var configPath = args[0] || './gms-tasks-config.json';
 
-gulp.task('export-gm-sprites-as-strips', function(callback) {
-  return exportImages(callback);
+var scriptName = 'export-gm-sprites-as-strips';
+var config = JSON.parse(fs.readFileSync(configPath))[scriptName];
+
+log("Starting `" + scriptName + "`");
+var time = new Date();
+
+exportImages(function(){
+  log("Finished `" + scriptName + "` after", (((new Date()) - time) / 1000), "seconds");
 });
 
 function exportImages(callback)

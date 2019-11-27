@@ -1,13 +1,19 @@
-var gulp = require('gulp');
 var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 var gm = require('gm');
 
-var config = JSON.parse(fs.readFileSync('./gms-gulp-tasks-config.json'))['generate-map'];
+var args = process.argv.splice(process.execArgv.length + 2);
+var configPath = args[0] || './gms-tasks-config.json';
 
-gulp.task('generate-map', function(callback) {
-  return importImages(callback);
+var scriptName = 'generate-map';
+var config = JSON.parse(fs.readFileSync(configPath))[scriptName];
+
+log("Starting `" + scriptName + "`");
+var time = new Date();
+
+importImages(function(){
+  log("Finished `" + scriptName + "` after", (((new Date()) - time) / 1000), "seconds");
 });
 
 function importImages(callback)
