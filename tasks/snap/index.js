@@ -70,7 +70,8 @@ function fixPositions(jsonLayer, searchId, replaceId, nested)
 	}
 }
 
-function updateIgnoreRoomsSnap = function() {
+function updateIgnoreRoomsSnap()
+{
   var arr = [];
   
   for (var i in config.ignoreRoomsSnap)
