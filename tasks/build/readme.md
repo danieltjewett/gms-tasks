@@ -1,6 +1,6 @@
 # GMS Tasks - Build
 
-The purpose of the build command is to take instances in several rooms and copy / paste them into the "main" room.
+The purpose of the `build` command is to take instances in several rooms and copy / paste them into the "main" room.
 
 Let's say we are building an open world game in Game Maker Studio 2.  We've found that after a while, using the room editor with thousands of instances makes the room editor slow and unusable.  The solution was to create "copies" of each room, in their full size, and only work on a section for each room.  Then, when it comes time to "test" the game in the "main" room, we can run `npm run build` to merge these instances into the one room.
 
@@ -16,7 +16,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
     "instanceCreationOrderId_InsertAt": 7,
     "layerToInsertName": "instances"
 },
-  "build": {
+"build": {
     "ignoreRoomsBuild": [
       "room_Kick_",
       "room_Kick_Temp"
@@ -42,6 +42,10 @@ We name each room according to the section number.  So room_Kick_2x3 represents 
 Now, we can add instances to each section of the room, keeping each section a unique room, and keeping our room editor usuable again.  Note, only instances are copied over.  Keep our main room empty (besides our global instances), and simply update tiles, backgrounds, etc. as needed in the main room.  We can copy those over into our sectional rooms if we need to for creating our "section" better.
 
 *Note* - we copy layer's as well as instances.  We need to be sure layer names are unique in our section rooms because the task currently doesn't account for that.  We've simply been naming our layers `s_2x3_what_the_layer_is` which ensures uniqueness across section rooms.
+
+## Building
+
+Run `npm run build` to copy all instances to you main room.  *Note* - we don't ever commit the main room to version control.  To revert the room back to it's clean state, simply run `npm run clean`.  *Note* - running `build` runs a `clean` first.
 
 ## Examples
 
