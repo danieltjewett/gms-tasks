@@ -1,6 +1,6 @@
 # GMS Tasks - Clean
 
-The purpose of the `clean` command is "clean" the main room from the `build` command -- essentially resetting it to its former state.
+The purpose of the `clean` command is "clean" the main room from the `build` command -- essentially reverting the main room to its former state.
 
 ## Installation
 

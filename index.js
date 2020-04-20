@@ -9,6 +9,4 @@ globby(["./tasks/**/index.js"]).then(function(paths) {
   
   log("available tasks:");
   log(availableTasks);
-  
-  log("look at for installation and how to run.");
 });
