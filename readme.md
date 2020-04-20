@@ -13,12 +13,12 @@ This package requires NPM and Node.js, which can be downloaded at https://nodejs
 
 To learn more about the individual tasks and how to configure them, each task has their own readme that can be read by clicking the links below:
 
-* [Build](/tasks/build/) (`npm run build`)
-* [Clean](/tasksclean/) (`npm run clean`)
-* [Generate Map](/tasksgenerate-map/) (`npm run generate-map`)
-* [Export GM Sprites As Strips](/tasksexport-gm-sprites-as-strips/) (`npm run export-gm-sprites-as-strips`)
-* [Make GM Sprites From Strips](/tasksmake-gm-sprites-from-strips/) (`npm run make-gm-sprites-from-strips`)
-* [Snap](/taskssnap/) (`npm run snap`)
+* [Build](../../tasks/build/) (`npm run build`)
+* [Clean](../../tasksclean/) (`npm run clean`)
+* [Generate Map](../../tasks/generate-map/) (`npm run generate-map`)
+* [Export GM Sprites As Strips](../../tasks/export-gm-sprites-as-strips/) (`npm run export-gm-sprites-as-strips`)
+* [Make GM Sprites From Strips](../../tasks/make-gm-sprites-from-strips/) (`npm run make-gm-sprites-from-strips`)
+* [Snap](../../tasks/snap/) (`npm run snap`)
 
 ## Contributing
 
