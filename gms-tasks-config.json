@@ -61,6 +61,7 @@
     ]
   },
   "snap": {
+    "gridSize": 32,
     "ignoreRoomsSnap": [
       "room_Opening",
       "room_parent"

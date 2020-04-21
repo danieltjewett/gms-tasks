@@ -43,7 +43,7 @@ Now, we can add instances to each section of the room, keeping each section a un
 
 *Note* - we copy layer's as well as instances.  We need to be sure layer names are unique in our section rooms because the task currently doesn't account for that.  We've simply been naming our layers `s_2x3_what_the_layer_is` which ensures uniqueness across section rooms.
 
-## Building
+## Running
 
 Run `npm run build` to copy all instances to you main room.  *Note* - we don't ever commit the main room to version control.  To revert the room back to it's clean state, simply run `npm run clean`.  *Note* - running `build` runs a `clean` first.
 

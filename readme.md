@@ -9,16 +9,16 @@ This package requires NPM and Node.js, which can be downloaded at https://nodejs
 1. In the terminal, run `npm install gms-tasks`.  This will add a node_modules directory (that can be ignored if using version control) and a package-lock.json file that should be kept / commited .
 2. Assuming we want to use our own config file, in the terminal run run `cp ./node_modules/gms-tasks/gms-tasks-config.json gms-tasks-config.json`
 
-## Directory
+## Tasks
 
-To learn more about the individual tasks and how to configure them, each task has their own readme that can be read by clicking the links below:
+To learn more about the individual tasks and how to configure them, each task has their own readme that can be read by clicking the tasks folder above.  Below is a list of the current tasks:
 
-* [Build](../tasks/build/) (`npm run build`)
-* [Clean](../tasksclean/) (`npm run clean`)
-* [Generate Map](../tasks/generate-map/) (`npm run generate-map`)
-* [Export GM Sprites As Strips](../tasks/export-gm-sprites-as-strips/) (`npm run export-gm-sprites-as-strips`)
-* [Make GM Sprites From Strips](../tasks/make-gm-sprites-from-strips/) (`npm run make-gm-sprites-from-strips`)
-* [Snap](../tasks/snap/) (`npm run snap`)
+* Build `npm run build`
+* Clean `npm run clean`
+* Generate Map `npm run generate-map`
+* Export GM Sprites As Strips `npm run export-gm-sprites-as-strips`
+* Make GM Sprites From Strips `npm run make-gm-sprites-from-strips`
+* Snap `npm run snap`
 
 ## Contributing
 

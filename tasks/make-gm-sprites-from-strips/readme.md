@@ -60,7 +60,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 We still have to import each yy file individually, but it will be faster than using the strip importer for each individual direction and sprite.  To do so, right click on Sprites and choose `Add Existing`.  Navigate to our `outputDirectory` and for each sprite, import the `.yy` file.
 
-## Building
+## Running
 
 Run `npm run make-gm-sprites-from-strips` to take a directory of strips and turn them into Game Maker Studio 2 sprite files.  *Note* - unlike other tasks, this task is probably better running outside your game's project directory.  We can run `npm install gms-tasks` in our directory with our strip images and then run the command in that directory to get our output.
 

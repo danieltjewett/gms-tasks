@@ -17,7 +17,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 * `spriteDirectory` - the default sprite directory.  Shouldn't need to change
 * `exportDirectory` - where we want to copy the exported strips to
 
-## Building
+## Running
 
 Run `npm run export-gm-sprites-as-strips` to take all sprites and export them as strip images.
 
