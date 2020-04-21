@@ -19,7 +19,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 ## Running
 
-Run `npm run export-gm-sprites-as-strips` to take all sprites and export them as strip images.
+Run `npm run export-gm-sprites-as-strips` to take all sprites and export them as strip images. *Note* - we probaby don't want to commit our `exportDirectory` to version control, assuming we are running this command in our game's project directory.
 
 ## Contributing
 

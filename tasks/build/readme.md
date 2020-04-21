@@ -35,13 +35,13 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 ## Setup in Game Maker Studio 2
 
-We currently have a base room called room_Parent which children rooms inherit several "global" instances.  These include the main character, the camera instance, and a few others.  The instances can be excluded from copying using the `instanceCreationOrderId_InsertAt` config var.  From there, we have a base room called `room_Kick_` that's simply inherits the parent, but is empty.  When we want to create new "sections", we'll copy and paste this room and add instances to that section.
+We currently have a base room called `room_Parent` which children rooms inherit several "global" instances.  These include the main character, the camera instance, and a few others.  The instances can be excluded from copying using the `instanceCreationOrderId_InsertAt` config var.  From there, we have a base room called `room_Kick_` that's simply inherits the parent, but is empty.  When we want to create new "sections", we'll copy and paste this room and add instances to that section.
 
-We name each room according to the section number.  So room_Kick_2x3 represents the 3rd row, 4th column section of the open world room.  We can name these rooms to whatever though, as long as the `copyRoomPattern` base renames the same for all of these rooms.
+We name each room according to the section number.  So `room_Kick_2x3` represents the 3rd row, 4th column section of the open world room.  We can name these rooms to whatever though, as long as the `copyRoomPattern` base renames the same for all of these rooms.
 
-Now, we can add instances to each section of the room, keeping each section a unique room, and keeping our room editor usuable again.  Note, only instances are copied over.  Keep our main room empty (besides our global instances), and simply update tiles, backgrounds, etc. as needed in the main room.  We can copy those over into our sectional rooms if we need to for creating our "section" better.
+Now, we can add instances to each section of the room, keeping each section a unique room, and keeping our room editor usuable again.  *Note*, only instances are copied over.  Keep our main room empty (besides our global instances), and simply update tiles, backgrounds, etc. as needed in the main room.  We can copy those over into our sectional rooms if we need to for creating our "section" better.
 
-*Note* - we copy layer's as well as instances.  We need to be sure layer names are unique in our section rooms because the task currently doesn't account for that.  We've simply been naming our layers `s_2x3_what_the_layer_is` which ensures uniqueness across section rooms.
+*Note* - we copy sub layer's of instances, as well as instances.  We need to be sure layer names are unique in our section rooms because the task currently doesn't account for that.  We've been simply been naming our layers `s_2x3_what_the_layer_is` which ensures uniqueness across section rooms.
 
 ## Running
 

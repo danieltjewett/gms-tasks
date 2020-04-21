@@ -1,6 +1,6 @@
 # GMS Tasks
 
-Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Current tasks include merging instances in several rooms into one room, stitching a world map from images, exporting all sprites from your project to sprite strips, making Game Maker sprites (yy files) from strip files.
+Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Current tasks include merging instances in several rooms into one room, stitching a world map from images, exporting all sprites from your project to sprite strips, making Game Maker sprites (`yy` files) from strip files.
 
 ## Installation
 
@@ -13,12 +13,12 @@ This package requires NPM and Node.js, which can be downloaded at https://nodejs
 
 To learn more about the individual tasks and how to configure them, each task has their own readme that can be read by clicking the tasks folder above.  Below is a list of the current tasks:
 
-* Build `npm run build`
-* Clean `npm run clean`
-* Generate Map `npm run generate-map`
-* Export GM Sprites As Strips `npm run export-gm-sprites-as-strips`
-* Make GM Sprites From Strips `npm run make-gm-sprites-from-strips`
-* Snap `npm run snap`
+* Build - `npm run build`
+* Clean - `npm run clean`
+* Generate Map - `npm run generate-map`
+* Export GM Sprites As Strips - `npm run export-gm-sprites-as-strips`
+* Make GM Sprites From Strips - `npm run make-gm-sprites-from-strips`
+* Snap - `npm run snap`
 
 ## Contributing
 
