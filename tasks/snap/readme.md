@@ -1,6 +1,6 @@
 # GMS Tasks - Snap
 
-The purpose of the `snap` command is take all instances found with in the `roomDir` and snap them to a grid.
+The purpose of the `snap` command is take all instances found within the `roomDir` and snap them to a grid.  Sometimes when copying / pasting large volumes of instances in the room editor, the grouping does not conform to the instance grid it was copied into.  This commmand will run and ensure all instances are placed correctly on a grid.
 
 ## Installation
 

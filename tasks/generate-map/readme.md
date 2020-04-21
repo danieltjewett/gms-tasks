@@ -1,6 +1,6 @@
 # GMS Tasks - Generate Map
 
-The purpose of the `generate-map` command is generate (stitch) a map image from a open world game.
+The purpose of the `generate-map` command is generate (stitch) a map image from a open world game in Game Maker Studio 2.
 
 ## Installation
 
@@ -27,8 +27,8 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 We need to create a map generator object in Game Maker to generate our initial images to be stitched.  Follow these steps:
 
-1. Create an object called obj_MapGenerator
-2. Add this code below for the `create event`.  In the tweak stuff region, either remove this entirely, or replace these `with`'s with default states of objects in the game.  Basically, do you want to "draw" something?  If not, do your logic here.  Also, `ZONE_WIDTH` and `ZONE_HEIGHT` are constants in my game.  Replace these with numbers that you want to capture your initial images at.  My game uses 480x480 for these.  These sizes shouldn't be too big.
+1. Create an object called `obj_MapGenerator`
+2. Add this code below for the `create event`.  In the tweak stuff region, add your objects in `with statements` with default states of objects in the game.  Basically, do we want to "draw" something?  If not, do our logic here.  Also, `ZONE_WIDTH` and `ZONE_HEIGHT` are constants in `Violet the Game`.  Replace these with numbers that we want to capture our initial images at.  `Violet` uses `zones`, which are sized at 480x480.  These sizes shouldn't be too big.
 
 ```
 #region set flag
@@ -43,7 +43,7 @@ with (noone)
     visible = false;
 }
 
-//NOTE - ANYTHING YOU DON'T WANT ON YOUR MAP, ADD HERE
+//NOTE - ANYTHING YOU DON'T WANT ON YOUR MAP IMAGE, ADD HERE
 
 #endregion
 #region initialize surface
@@ -53,7 +53,7 @@ surfaceAll = surface_create(ZONE_WIDTH, ZONE_HEIGHT);
 #endregion
 ```
 
-3. Add this code below for the `begin step event`.  Assuming your open world activates / deactives things, we want EVERYTHING to be activated for the drawer.
+3. Add this code below for the `begin step event`.  Assuming our open world activates / deactives things, we want EVERYTHING to be activated for the drawer.
 
 ```
 #region override object activation
@@ -63,7 +63,7 @@ instance_activate_all();
 #endregion
 ```
 
-4. Add this code below for the `draw event`.  We have a couple of things that could be updated or removed.  First, if you have any backgrounds, update the name of your background layer from `bg_overlay` to whatever it's called in your game.  Second, `TILE_GRID` are constants in my game.  Replace these with numbers that represent your grid size.  If we aren't using tiles, you can remove the `part 1, tiles` code block.
+4. Add this code below for the `draw event`.  We have a few things that could be updated or removed below.  First, if we have any backgrounds, update the name of our background layer from `bg_overlay` to whatever it's called in our game.  Second, `TILE_GRID` are constants in `Violet`.  Replace these with numbers that represent our grid size.  If we aren't using tiles, we can remove the `part 1, tiles` code block.
 
 ```
 #region draw it
