@@ -48,6 +48,8 @@ function start(callback)
 
 function fixPositions(jsonLayer, searchId, replaceId, nested)
 {
+  var gridSize = config.gridSize * .5;
+
 	for (var i=0; i<jsonLayer.layers.length; i++)
 	{
 		var layer = jsonLayer.layers[i];
@@ -58,11 +60,11 @@ function fixPositions(jsonLayer, searchId, replaceId, nested)
 			{
 				var inst = layer.instances[j];
 				
-        log("Still need to check if instance is a wall");
-        process.exit();
+        //log("Still need to check if instance is a wall");
+        //process.exit();
         
-				inst.x = Math.round(inst.x / 16) * 16;
-        inst.y = Math.round(inst.y / 16) * 16;
+				inst.x = Math.round(inst.x / gridSize) * gridSize;
+        inst.y = Math.round(inst.y / gridSize) * gridSize;
 			}
 		}
 		
@@ -70,7 +72,8 @@ function fixPositions(jsonLayer, searchId, replaceId, nested)
 	}
 }
 
-function updateIgnoreRoomsSnap = function() {
+function updateIgnoreRoomsSnap()
+{
   var arr = [];
   
   for (var i in config.ignoreRoomsSnap)

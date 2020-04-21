@@ -40,7 +40,7 @@ function start(callback)
         cleanLayerPointerLayers(layerPointer);
         
         var newPattern = [
-          config.roomDir + "room_Kick_*/*.yy",
+          config.roomDir + config.copyRoomPattern + "*/*.yy",
         ]
         .concat(updateIgnoreRoomsBuild())
         .concat([concatIgnoreRoom(config.exportRoom)]);
@@ -74,7 +74,7 @@ function start(callback)
 function copyInstanceCreationCode(callback)
 {
   var pattern = [
-    config.roomDir + "room_Kick_*/*.gml",
+    config.roomDir + config.copyRoomPattern + "*/*.gml",
   ]
   .concat(updateIgnoreRoomsBuild())
   .concat([concatIgnoreRoom(config.exportRoom)]);
