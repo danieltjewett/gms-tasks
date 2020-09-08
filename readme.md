@@ -7,9 +7,9 @@ Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Cu
 This package requires NPM and Node.js, which can be downloaded at https://nodejs.org/en/download/ .  Once Node is installed, open up a terminal or cmd window and navigate to the directory where your game is installed and follow these steps:
 
 1. In the terminal, run `npm install gms-tasks`.  This will add a node_modules directory (that can be ignored if using version control) and a package-lock.json file that should be kept / commited.
-2. Add this to the "scripts" in your `package.json` file:
+2. Add this to the `scripts` in your `package.json` file:
 ```
-scripts": {
+"scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "export-gm-sprites-as-strips": "node node_modules/gms-tasks/tasks/export-gm-sprites-as-strips/index.js ./gms-tasks-config.json",
     "generate-map": "node node_modules/gms-tasks/tasks/generate-map/index.js ./gms-tasks-config.json",
