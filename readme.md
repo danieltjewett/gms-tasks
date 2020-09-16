@@ -1,6 +1,6 @@
 # GMS Tasks
 
-Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Current tasks include merging instances in several rooms into one room, stitching a world map from images, exporting all sprites from your project to sprite strips, making Game Maker sprites (`yy` files) from strip files.
+Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Current tasks include merging instances in several rooms into one room, stitching a world map from images, exporting all sprites from your project to sprite strips, making Game Maker sprites (`yy` files) from strip files, enabling and disabling rooms from the resource tree.
 
 ## Installation
 
@@ -16,7 +16,9 @@ This package requires NPM and Node.js, which can be downloaded at https://nodejs
     "make-gm-sprites-from-strips": "node node_modules/gms-tasks/tasks/make-gm-sprites-from-strips/index.js ./gms-tasks-config.json",
     "clean": "node node_modules/gms-tasks/tasks/clean/index.js ./gms-tasks-config.json",
     "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json",
-    "snap": "node node_modules/gms-tasks/tasks/snap/index.js ./gms-tasks-config.json"
+    "snap": "node node_modules/gms-tasks/tasks/snap/index.js ./gms-tasks-config.json",
+    "disable-rooms": "node node_modules/gms-tasks/tasks/disable-rooms/index.js ./gms-tasks-config.json",
+    "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json"
  },
  ```
 3. Assuming we want to use our own config file, in the terminal run run `cp ./node_modules/gms-tasks/gms-tasks-config.json gms-tasks-config.json`
@@ -31,6 +33,8 @@ To learn more about the individual tasks and how to configure them, each task ha
 * Export GM Sprites As Strips - `npm run export-gm-sprites-as-strips`
 * Make GM Sprites From Strips - `npm run make-gm-sprites-from-strips`
 * Snap - `npm run snap`
+* Disable Rooms - `npm run disable-rooms`
+* Enable Rooms - `npm run enable-rooms`
 
 ## Contributing
 

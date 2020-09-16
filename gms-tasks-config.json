@@ -66,5 +66,12 @@
       "room_Opening",
       "room_parent"
     ]
+  },
+  "enable-disable-rooms": {
+    "roomDir": "./rooms/",
+    "rooms": [
+      "room_Kick_",
+      "room_Kick_Temp"
+    ]
   }
 }
