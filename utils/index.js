@@ -1,5 +1,5 @@
-exports.cleanInstanceCreationsArr = function(json, instanceCreationOrderId_InsertAt) {
-  json.instanceCreationOrderIDs.length = instanceCreationOrderId_InsertAt;
+exports.cleanInstanceCreationsArr = function(json, instanceCreationOrder_InsertAt) {
+  json.instanceCreationOrder.length = instanceCreationOrder_InsertAt;
   return json;
 }
 
@@ -25,4 +25,9 @@ exports.cleanLayerPointerLayers = function(layerPointer) {
 
 exports.concatIgnoreRoom = function(roomDir, dir) {
   return "!" + roomDir + dir + "/**/*";
+}
+
+exports.fixYYFile = function(input) {
+  var regex = /\,(?!\s*?[\{\[\"\'\w])/g;
+  return input.replace(regex, ''); // remove all trailing commas
 }
