@@ -3,6 +3,8 @@ var fs = require('fs');
 var globby = require('globby');
 var jimp = require('jimp');
 
+var fixYYFile = require('../../utils/').fixYYFile;
+
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
 
@@ -48,7 +50,7 @@ function exportImage(path)
   
   return new Promise(function(resolve, reject) {
     //get the yy data
-    var data = JSON.parse(fs.readFileSync(path));
+    var data = JSON.parse(fixYYFile(fs.readFileSync(path, {encoding:'utf8'})));
     
     var width = data.width;
     var height = data.height;
@@ -69,7 +71,7 @@ function exportImage(path)
       //loops through each frame's image and copies to the main image
       for (var i=0; i<frameLength; i++)
       {
-        var imageName = data.frames[i].id + ".png";
+        var imageName = data.frames[i].name + ".png";
         
         promises.push(copyImage(imagePath, imageName, image, width, i));
       }
