@@ -42,7 +42,8 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
     },
     "prefixStr": "spr_NPC_",
     "stripDirectory": "./strips/",
-    "outputDirectory": "./yy/"
+    "outputDirectory": "./yy/",
+    "spritesFolder": "Sprites"
 },
 ```
 
@@ -55,6 +56,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 * `prefixStr` - the prefix to name the sprite (will be concantated with Animation_Name)
 * `stripDirectory` - the directory where all the strips are stored
 * `exportDirectory` - the directory where the Game Maker Studio 2 sprites will be generated
+* `spritesFolder` - the directory where the Game Maker Studio 2 sprites ultimately will go
 
 ## Import into Game Maker Studio 2
 

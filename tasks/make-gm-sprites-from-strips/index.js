@@ -57,40 +57,104 @@ function start(callback)
     return Promise.all(allImports).then(function(){
       log("imported strips");
       
+      //add name dynamically later
       var templateData = {
-        "id": "",
-        "modelName": "GMSprite",
-        "mvc": "1.12",
-        "name": "",
-        "For3D": false,
-        "HTile": false,
-        "VTile": false,
-        "bbox_bottom": 31,
+        "bboxMode": 0,
+        "collisionKind": 1,
+        "type": 0,
+        "origin": 0,
+        "premultiplyAlpha": false,
+        "edgeFiltering": false,
+        "collisionTolerance": 0,
+        "swfPrecision": 2.525,
         "bbox_left": 7,
         "bbox_right": 23,
         "bbox_top": 3,
-        "bboxmode": 0,
-        "colkind": 1,
-        "coltolerance": 0,
-        "edgeFiltering": false,
-        "frames": [],
+        "bbox_bottom": 31,
+        "HTile": false,
+        "VTile": false,
+        "For3D": false,
+        "width": config.grid,
+        "height": config.grid,
+        "textureGroupId": {
+          "name": "Default",
+          "path": "texturegroups/Default",
+        },
+        "swatchColours": null,
         "gridX": 0,
         "gridY": 0,
-        "height": 32,
-        "layers": [],
-        "origin": 9,
-        "originLocked": true,
-        "playbackSpeed": 1,
-        "playbackSpeedType": 1,
-        "premultiplyAlpha": false,
-        "sepmasks": false,
-        "swatchColours": null,
-        "swfPrecision": 2.525,
-        "textureGroupId": "1225f6b0-ac20-43bd-a82e-be73fa0b6f4f",
-        "type": 0,
-        "width": 32,
-        "xorig": 16,
-        "yorig": 24
+        "frames": [], //add more later
+        "sequence": { //update keyframes later (adds spriteId and parent dynamically later)
+          "timeUnits": 1,
+          "playback": 1,
+          "playbackSpeed": 1.0,
+          "playbackSpeedType": 1,
+          "autoRecord": true,
+          "volume": 1.0,
+          "length": 1.0, //gets updated as there are more frames
+          "events": {
+            "Keyframes": [],
+            "resourceVersion": "1.0",
+            "resourceType": "KeyframeStore<MessageEventKeyframe>",
+          },
+          "moments": {
+            "Keyframes": [],
+            "resourceVersion": "1.0",
+            "resourceType": "KeyframeStore<MomentsEventKeyframe>",
+          },
+          "tracks": [
+            {
+              "name": "frames",
+              "spriteId": null,
+              "keyframes": {
+                "Keyframes": [],
+                "resourceVersion": "1.0",
+                "resourceType": "KeyframeStore<SpriteFrameKeyframe>",
+              },
+              "trackColour": 0,
+              "inheritsTrackColour": true,
+              "builtinName": 0,
+              "traits": 0,
+              "interpolation": 1,
+              "tracks": [],
+              "events": [],
+              "modifiers": [],
+              "isCreationTrack": false,
+              "resourceVersion": "1.0",
+              "tags": [],
+              "resourceType": "GMSpriteFramesTrack",
+            },
+          ],
+          "visibleRange": {
+            "x": 0.0,
+            "y": 0.0,
+          },
+          "lockOrigin": true,
+          "showBackdrop": true,
+          "showBackdropImage": false,
+          "backdropImagePath": "",
+          "backdropImageOpacity": 0.5,
+          "backdropWidth": 1920,
+          "backdropHeight": 1080,
+          "backdropXOffset": 0.0,
+          "backdropYOffset": 0.0,
+          "xorigin": 16,
+          "yorigin": 24,
+          "eventToFunction": {},
+          "eventStubScript": null,
+          "resourceVersion": "1.3",
+          "name": "",
+          "tags": [],
+          "resourceType": "GMSequence",
+        },
+        "layers": [], //add more later
+        "parent": {
+          "name": config.spritesFolder,
+          "path": "folders/" + config.spritesFolder + ".yy",
+        },
+        "resourceVersion": "1.0",
+        "tags": [],
+        "resourceType": "GMSprite",
       };
       
       var allSprites = [];
@@ -200,24 +264,22 @@ function makeSprites(stripName, animationName, yyData, data)
   return new Promise(function(resolve, reject) {
     var promises = [];
     
-    var spriteId = uuidv1();
     var spriteName = config.prefixStr + stripName + "_" + animationName;
     
-    yyData.id = spriteId;
     yyData.name = spriteName;
     
     var layerId = uuidv1();
     
     var layerData = {
-      "id": layerId,
-      "modelName": "GMImageLayer",
-      "mvc": "1.0",
-      "SpriteId": spriteId,
-      "blendMode": 0,
+      "visible": true,
       "isLocked": false,
-      "name": "default",
-      "opacity": 100,
-      "visible": true
+      "blendMode": 0,
+      "opacity": 100.0,
+      "displayName": "default",
+      "resourceVersion": "1.0",
+      "name": layerId,
+      "tags": [],
+      "resourceType": "GMImageLayer",
     };
     
     yyData.layers.push(layerData);
@@ -225,7 +287,7 @@ function makeSprites(stripName, animationName, yyData, data)
     //for each frame data, make seperate image data, since that is how yy files work
     for (var i=0; i<data.frames; i++)
     {
-      promises.push(writeSpriteImage(i, yyData, spriteName, spriteId, layerId));
+      promises.push(writeSpriteImage(i, yyData, spriteName, layerId));
     }
     
     Promise.all(promises).then(function() {
@@ -241,41 +303,83 @@ function makeSprites(stripName, animationName, yyData, data)
 }
 
 //makes a sprite image data for yy files
-function writeSpriteImage(imageIndex, yyData, spriteName, spriteId, layerId)
+function writeSpriteImage(imageIndex, yyData, spriteName, layerId)
 {
   return new Promise(function(mainResolve, mainReject) {
     jimp.read(config.tempImagesDirectory + spriteName + "_" + imageIndex + ".png").then(function(image) {
       var promises = [];
       
       var frameId = uuidv1();
+      var keyframeId = uuidv1();
       
-      var compositeId = uuidv1();
-      var imageId = uuidv1();
+      var path = config.spritesFolder.toLowerCase() + "/" + spriteName + "/" + spriteName + ".yy";
+      
+      var frameIdObj = {
+        "name": frameId,
+        "path": path
+      };
+      
+      var spriteNameObj = {
+        "name": spriteName,
+        "path": path,
+      };
       
       var frameData = {
-        "id": frameId,
-        "modelName": "GMSpriteFrame",
-        "mvc": "1.0",
-        "SpriteId": spriteId,
         "compositeImage": {
-          "id": compositeId,
-          "modelName": "GMSpriteImage",
-          "mvc": "1.0",
-          "FrameId": frameId,
-          "LayerId": "00000000-0000-0000-0000-000000000000"
+          "FrameId": frameIdObj,
+          "LayerId": null,
+          "resourceVersion": "1.0",
+          "name": "imported",
+          "tags": [],
+          "resourceType": "GMSpriteBitmap",
         },
         "images": [
           {
-            "id": imageId,
-            "modelName": "GMSpriteImage",
-            "mvc": "1.0",
-            "FrameId": frameId,
-            "LayerId": layerId,
+            "FrameId": frameIdObj,
+            "LayerId": {
+              "name": layerId,
+              "path": path,
+            },
+            "resourceVersion": "1.0",
+            "name": "",
+            "tags": [],
+            "resourceType": "GMSpriteBitmap",
           }
-        ]
+        ],
+        "parent": spriteNameObj,
+        "resourceVersion": "1.0",
+        "name": frameId,
+        "tags": [],
+        "resourceType": "GMSpriteFrame",
       };
       
       yyData.frames.push(frameData);
+      
+      var keyframeData = {
+        "id": keyframeId,
+        "Key": yyData.sequence.tracks[0].keyframes.Keyframes.length - 1,
+        "Length": 1.0,
+        "Stretch": false,
+        "Disabled": false,
+        "IsCreationKey": false,
+        "Channels": {
+          "0": {
+            "Id": {
+              "name": frameId,
+              "path": path,
+            },
+            "resourceVersion": "1.0",
+            "resourceType": "SpriteFrameKeyframe",
+          },
+        },
+        "resourceVersion": "1.0",
+        "resourceType": "Keyframe<SpriteFrameKeyframe>",
+      };
+      
+      yyData.sequence.spriteId = spriteNameObj;
+      yyData.sequence.parent = spriteNameObj;
+      yyData.sequence.tracks[0].keyframes.Keyframes.push(keyframeData);
+      yyData.sequence.length = yyData.sequence.tracks[0].keyframes.Keyframes.length;
       
       //yy files have both the image in root of the sprite file, as well as in each layers folder
       //so that is what these two blocks are doing
