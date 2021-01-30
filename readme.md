@@ -7,6 +7,12 @@ Adds some command line tasks for repetitive actions for Game Maker Studio 2.  Cu
 This package requires NPM and Node.js, which can be downloaded at https://nodejs.org/en/download/ .  Once Node is installed, open up a terminal or cmd window and navigate to the directory where your game is installed and follow these steps:
 
 1. In the terminal, run `npm install gms-tasks`.  This will add a node_modules directory (that can be ignored if using version control) and a package-lock.json file that should be kept / commited.
+
+**NOTE**
+
+For GMS 2.2, use version 0.2.
+For GMS 2.3, use version 0.3.
+
 2. Add this to the `scripts` in your `package.json` file:
 ```
 "scripts": {
