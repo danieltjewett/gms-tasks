@@ -19,7 +19,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 ## Enabling
 
-Run `npm run enable-rooms` to restore rooms back into the resource tree.  Game Maker Studio should be reloaded and rooms will be relink back into project.
+Run `npm run enable-rooms` to restore rooms back into the asset browser.  Game Maker Studio should be reloaded and rooms will be relink back into project.
 
 ## Contributing
 

@@ -2,7 +2,7 @@ var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 
-var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
+var fixYYFile = require('../../utils/').fixYYFile;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -32,40 +32,26 @@ function start(callback)
     {
       var projectPath = paths[0];
       
-      var yyp = JSON.parse(fs.readFileSync(projectPath));
+      var yyp = JSON.parse(fixYYFile(fs.readFileSync(projectPath, {encoding:'utf8'})));
       
-      return globby(config.restoreDir + "views/*.yy").then(function(viewPaths){
-        //dig through project file to restore views
-        for (var i=0; i<viewPaths.length; i++)
-        {
-          var viewPath = viewPaths[i];
-          var fileName = viewPath.substr(viewPath.lastIndexOf("/") + 1); //get file name (with extension)
-          
-          log("Restoring", projectPath);
-          fs.copyFileSync(viewPath, "./views/" + fileName, 0);
-          
-          //clean up view file
-          fs.unlinkSync(viewPath);
-        }
+      //replace RoomOrderNodes
+      var roomOrderNodes = JSON.parse(fs.readFileSync(config.restoreDir + "roomOrderNodes.json"));
+      yyp.RoomOrderNodes = roomOrderNodes;
         
-        //clean up view folder
-        fs.rmdirSync(config.restoreDir + "views/");
-        
-        //restore yyp
-        var restoreResources = JSON.parse(fs.readFileSync(config.restoreDir + "resources.json"));
-        
-        yyp.resources = yyp.resources.concat(restoreResources);
-        
-        var strYYP = JSON.stringify(yyp, null, 4);
-        log("Saving", projectPath);
-        fs.writeFileSync(projectPath, strYYP);
-        
-        //clean up resources.json and restoreDir
-        fs.unlinkSync(config.restoreDir + "resources.json");
-        fs.rmdirSync(config.restoreDir);
-        
-        return callback();
-      });
+      //restore yyp
+      var restoreResources = JSON.parse(fs.readFileSync(config.restoreDir + "resources.json"));
+      yyp.resources = yyp.resources.concat(restoreResources);
+      
+      var strYYP = JSON.stringify(yyp, null, 2);
+      log("Saving", projectPath);
+      fs.writeFileSync(projectPath, strYYP);
+      
+      //clean up roomOrderNodes.json, resources.json and restoreDir
+      fs.unlinkSync(config.restoreDir + "roomOrderNodes.json");
+      fs.unlinkSync(config.restoreDir + "resources.json");
+      fs.rmdirSync(config.restoreDir);
+      
+      return callback();
     }
     else
     {

@@ -1,12 +1,12 @@
 var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
-var uuidv1 = require('uuid/v1');
 
 var cleanInstanceCreationsArr = require('../../utils/').cleanInstanceCreationsArr;
 var cleanLayerPointerLayers = require('../../utils/').cleanLayerPointerLayers;
 var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
 var findLayerPointer = require('../../utils/').findLayerPointer;
+var fixYYFile = require('../../utils/').fixYYFile;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -30,8 +30,8 @@ function start(callback)
     {
       var exportRoomPath = paths[0];
       
-      var finalJSON = JSON.parse(fs.readFileSync(exportRoomPath));
-      finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrderId_InsertAt);
+      var finalJSON = JSON.parse(fixYYFile(fs.readFileSync(exportRoomPath, {encoding:'utf8', flag:'r'})));
+      finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrder_InsertAt);
       
       var layerPointer = findLayerPointer(finalJSON, config.layerToInsertName);
     
@@ -94,66 +94,23 @@ function copyInstanceCreationCode(callback)
 
 function copyRoomToTheRoom(finalJSON, layerPointer, path)
 {
-  var workingJSON = JSON.parse(fs.readFileSync(path));
+  var workingJSON = JSON.parse(fixYYFile(fs.readFileSync(path, {encoding:'utf8', flag:'r'})));
 
   var workingLayerPointer = findLayerPointer(workingJSON, config.layerToInsertName);
   
   //section rooms still have the first few objects in creation
-  var workingInstanceCreationOrderIDs = workingJSON.instanceCreationOrderIDs.slice(config.instanceCreationOrderId_InsertAt);
+  var workingInstanceCreationOrder = workingJSON.instanceCreationOrder.slice(config.instanceCreationOrder_InsertAt);
   
-  //replace the uuid with a real uuid, because the previous uuid is a copy/paste, not making it unique
-  for (var i=0; i<workingInstanceCreationOrderIDs.length; i++)
+  //gms 2.3 added a pathing object that needs to be updated to the main export room
+  for (var i=0; i<workingInstanceCreationOrder.length; i++)
   {
-    var workingInstanceId = workingInstanceCreationOrderIDs[i];
-    
-    var uuid = uuidv1(); 
-    
-    replaceInstanceWithId(workingLayerPointer, workingInstanceId, uuid, false);
-    workingInstanceCreationOrderIDs[i] = uuid;
+    var obj = workingInstanceCreationOrder[i];
+    obj.path = config.roomDir + config.exportRoom + "/" + config.exportRoom + ".yy";
   }
   
-  finalJSON.instanceCreationOrderIDs = finalJSON.instanceCreationOrderIDs.concat(workingInstanceCreationOrderIDs);
+  finalJSON.instanceCreationOrder = finalJSON.instanceCreationOrder.concat(workingInstanceCreationOrder);
   
   layerPointer.layers = layerPointer.layers.concat(workingLayerPointer.layers);
-}
-
-function replaceInstanceWithId(jsonLayer, searchId, replaceId, nested)
-{
-	var found = false;
-	
-	for (var i=0; i<jsonLayer.layers.length; i++)
-	{
-		var layer = jsonLayer.layers[i];
-    
-		if (layer.instances)
-		{
-			for (var j=0; j<layer.instances.length; j++)
-			{
-				var inst = layer.instances[j];
-				
-				if (inst.id === searchId)
-				{
-					inst.id = replaceId;
-					return true;
-				}
-			}
-		}
-		
-		found = replaceInstanceWithId(layer, searchId, replaceId, true);
-		
-		if (found)
-		{
-			break;
-		}
-	}
-	
-	if (!found && !nested)
-	{
-		log("Couldn't find the id in " + searchId + " the json.");
-    process.exit();
-	}
-  
-  return found;
 }
 
 function updateIgnoreRoomsBuild()

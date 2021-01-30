@@ -44,13 +44,14 @@
     },
     "prefixStr": "spr_NPC_",
     "stripDirectory": "./strips/",
-    "outputDirectory": "./yy/"
+    "outputDirectory": "./yy/",
+    "spritesFolder": "Sprites"
   },
   "build-clean-snap": {
     "roomDir": "./rooms/",
     "exportRoom": "room_Kickstarter",
     "copyRoomPattern": "room_Kick_",
-    "instanceCreationOrderId_InsertAt": 7,
+    "instanceCreationOrder_InsertAt": 7,
     "layerToInsertName": "instances"
   },
   "clean": {},

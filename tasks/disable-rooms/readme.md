@@ -19,7 +19,7 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 
 ## Disabling
 
-Run `npm run disable-rooms` to disable the rooms from the resource tree.  Game Maker Studio should be reloaded and rooms will be unlinked from the project.  Room data will still be in the project folder.  It should be safe to commit these changes to version control, and is recommend to add the `restoreDir` directory to version control as well.  *Note* - we shouldn't mess with the room structure folder structure or enabling may not work.
+Run `npm run disable-rooms` to disable the rooms from the asset browser.  Game Maker Studio should be reloaded and rooms will be unlinked from the project.  Room data will still be in the project folder.  It should be safe to commit these changes to version control, and is recommend to add the `restoreDir` directory to version control as well.  *Note* - we shouldn't mess with the room folder structure, or room order as enabling may not work as expected.
 
 ## Contributing
 

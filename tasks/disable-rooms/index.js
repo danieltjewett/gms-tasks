@@ -2,7 +2,7 @@ var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 
-var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
+var fixYYFile = require('../../utils/').fixYYFile;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -24,7 +24,6 @@ function start(callback)
   if (!fs.existsSync(config.restoreDir))
   {
     fs.mkdirSync(config.restoreDir);
-    fs.mkdirSync(config.restoreDir + "views/");
   }
   else
   {
@@ -37,134 +36,68 @@ function start(callback)
     {
       var projectPath = paths[0];
       
-      var yyp = JSON.parse(fs.readFileSync(projectPath));
+      var yyp = JSON.parse(fixYYFile(fs.readFileSync(projectPath, {encoding:'utf8'})));
       var resources = yyp.resources;
+      var roomOrderNodes = yyp.RoomOrderNodes;
       
-      var roomsHash = {};
-      var viewsHash = {};
+      //back up entire roomOrderNodes, to restore later
+      var strRoomOrder = JSON.stringify(roomOrderNodes, null, 2);
+      log("Backing up", config.restoreDir + "roomOrderNodes.json");
+      fs.writeFileSync(config.restoreDir + "roomOrderNodes.json", strRoomOrder);
       
-      //dig through project file to get all folders and rooms
-      for (var i=0; i<resources.length; i++)
+      //dig through the roomOrderNodes to remove
+      for (var i=0; i<roomOrderNodes.length; i++)
       {
-        var obj = resources[i];
-        switch (obj.Value.resourceType)
+        var obj = roomOrderNodes[i];
+        
+        for (var j=0; j<config.rooms.length; j++)
         {
-          case "GMFolder":
-            viewsHash[obj.Key] = obj.Value.resourcePath;
-            break;
+          var roomName = config.rooms[j];
           
-          case "GMRoom":
-            roomsHash[obj.Key] = obj.Value.resourcePath;
-            break;
-        }
-      }
-      
-      //go through rooms, keeping rooms that we want to disable
-      for (var roomId in roomsHash)
-      {
-        var path = roomsHash[roomId];
-        
-        var foundRoom = false;
-        
-        var roomName = path.split("\\")[1];
-        
-        for (var i=0; i<config.rooms.length; i++)
-        {
-          if (config.rooms[i] === roomName)
+          if (obj.roomId.name === roomName)
           {
-            foundRoom = true;
+            roomOrderNodes.splice(i, 1);
+            i--;
+            
             break;
           }
         }
-        
-        if (!foundRoom)
-        {
-          delete roomsHash[roomId];
-        }
       }
       
-      //go through views, keeping views with room data
-      for (viewId in viewsHash)
-      {
-        var viewPath = viewsHash[viewId];
-        
-        var foundView = false;
-        
-        var viewChildren = JSON.parse(fs.readFileSync(viewPath)).children;
-        
-        for (var roomId in roomsHash)
-        {
-          for (var i=0; i<viewChildren.length; i++)
-          {
-            if (viewChildren[i] === roomId)
-            {
-              foundView = true;
-              break;
-            }
-          }
-          
-          if (foundView)
-          {
-            break;
-          }
-        }
-        
-        if (!foundView)
-        {
-          delete viewsHash[viewId];
-        }
-      }
-      
-      //go through views, backing up original views to restore later
-      for (viewId in viewsHash)
-      {
-        var viewPath = viewsHash[viewId];
-        var fileName = viewPath.substr(viewPath.lastIndexOf("\\") + 1); //get file name with extension
-        
-        var viewData = JSON.parse(fs.readFileSync(viewPath));
-        var strViewData = JSON.stringify(viewData, null, 4);
-        
-        log("Backing up", config.restoreDir + "views/" + fileName);
-        fs.writeFileSync(config.restoreDir + "views/" + fileName, strViewData);
-      }
-      
-      //remove resource from project
-      //save sources to restore later
-      //save room to restore later
-      //delete room yy file
       var savedResources = [];
+      
+      //dig through the resources to and add all the rooms and remove from resources
       for (var i=0; i<resources.length; i++)
       {
         var obj = resources[i];
         
-        switch (obj.Value.resourceType)
-        {          
-          case "GMRoom":
-            for (var roomId in roomsHash)
-            {
-              if (roomId === obj.Key)
-              {                
-                savedResources.push(obj);
-                resources.splice(i, 1);
-                
-                i --;
-                break;
-              }
-            }
+        for (var j=0; j<config.rooms.length; j++)
+        {
+          var roomName = config.rooms[j];
           
+          if (obj.id.name === roomName)
+          {
+            savedResources.push(obj);
+            resources.splice(i, 1);
+            i--;
+            
             break;
+          }
         }
       }
+      
       //write out the json file, or yy file
       var strSavedResources = JSON.stringify(savedResources, null, 2);
       log("Backing up", config.restoreDir + "resources.json");
       fs.writeFileSync(config.restoreDir + "resources.json", strSavedResources);
+      
       //save actual resources to original yyp project
       yyp.resources = resources;
-      var strYYP = JSON.stringify(yyp, null, 4);
+      yyp.RoomOrderNodes = roomOrderNodes;
+      var strYYP = JSON.stringify(yyp, null, 2);
       log("Saving", projectPath);
       fs.writeFileSync(projectPath, strYYP);
-
+      
       return callback();
     }
     else

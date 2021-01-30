@@ -5,6 +5,7 @@ var globby = require('globby');
 var cleanInstanceCreationsArr = require('../../utils/').cleanInstanceCreationsArr;
 var cleanLayerPointerLayers = require('../../utils/').cleanLayerPointerLayers;
 var findLayerPointer = require('../../utils/').findLayerPointer;
+var fixYYFile = require('../../utils/').fixYYFile;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -28,8 +29,8 @@ function start(callback)
     {
       var exportRoomPath = paths[0];
       
-      var finalJSON = JSON.parse(fs.readFileSync(exportRoomPath));
-      finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrderId_InsertAt);
+      var finalJSON = JSON.parse(fixYYFile(fs.readFileSync(exportRoomPath, {encoding:'utf8', flag:'r'})));
+      finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrder_InsertAt);
       
       var layerPointer = findLayerPointer(finalJSON, config.layerToInsertName);
     
