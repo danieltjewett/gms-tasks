@@ -44,7 +44,8 @@
     },
     "prefixStr": "spr_NPC_",
     "stripDirectory": "./strips/",
-    "outputDirectory": "./yy/"
+    "outputDirectory": "./yy/",
+    "spritesFolder": "Sprites"
   },
   "build-clean-snap": {
     "roomDir": "./rooms/",

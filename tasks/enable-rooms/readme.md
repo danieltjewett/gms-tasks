@@ -7,7 +7,7 @@ The purpose of the `enable-rooms` command is "enable" the rooms that were disabl
 In the config file `gms-tasks-config.json`, we have these values that we can configure:
 
 ```
-"enable-disable-rooms": {,
+"enable-disable-rooms": {
     "restoreDir": "./disabled-rooms/",
     "rooms": []
 },
