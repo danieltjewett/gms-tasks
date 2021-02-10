@@ -28,18 +28,23 @@ function start(callback)
   
   //most likely, get all the sprites in the sprites directory
   return globby(pattern).then(function(paths){
-    var allExports = [];
-    
     log("found", paths.length, "yy files needing to be turned into strips");
     
-    for (var i=0; i<paths.length; i++)
-    {
-      allExports.push(exportImage(paths[i]));
-    }
+    //last path is going to simply call the callback
+    paths.push(null);
     
-    return Promise.all(allExports).then(function(){
-      return callback();
-    });
+    paths.reduce(function(previousPromise, nextIndex) {
+      return previousPromise.then(function() {
+        if (nextIndex !== null)
+        {
+          return exportImage(nextIndex);
+        }
+        else
+        {
+          return callback();
+        }
+      });
+    }, Promise.resolve());
   });
 }
 
