@@ -1,21 +1,21 @@
 exports.shiftPositions = function(jsonLayer, left, top) {
-	for (var i=0; i<jsonLayer.layers.length; i++)
-	{
-		var layer = jsonLayer.layers[i];
+  for (var i=0; i<jsonLayer.layers.length; i++)
+  {
+    var layer = jsonLayer.layers[i];
     
-		if (layer.instances)
-		{
-			for (var j=0; j<layer.instances.length; j++)
-			{
-				var inst = layer.instances[j];
+    if (layer.instances)
+    {
+      for (var j=0; j<layer.instances.length; j++)
+      {
+        var inst = layer.instances[j];
         
-				inst.x += left;
+        inst.x += left;
         inst.y += top;
-			}
-		}
-		
-		exports.shiftPositions(layer, left, top);
-	}
+      }
+    }
+    
+    exports.shiftPositions(layer, left, top);
+  }
 }
 
 exports.getSectionNumFromPath = function(path) {    

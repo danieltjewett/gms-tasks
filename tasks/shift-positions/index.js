@@ -37,7 +37,7 @@ function start(callback)
   
       var workingLayerPointer = findLayerPointer(workingJSON, config.layerToInsertName);
       
-      shiftPositions(workingLayerPointer);
+      shiftPositions(workingLayerPointer, config.left, config.top);
       
       var str = JSON.stringify(workingJSON);
       fs.writeFileSync(path, str);
