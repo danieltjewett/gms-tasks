@@ -24,8 +24,6 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 * `copyRoomPattern` - the name of the rooms you want to shift instances positions from.  Everything after the last character of this string becomes a wildcard character.  For example, 
 * `left` - how much to move all the instances to the left by
 * `top` - how much to move all the instances to the top by
-* `gridSize` - how big of a grid our tiles are on for our project
-* `gridSize` - how big of a grid our tiles are on for our project
 * `ignoreRooms` - an array of rooms to be excluded from the shift-positions command
 
 ## Running
