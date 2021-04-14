@@ -2,10 +2,13 @@ var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 
+var shiftPositions = require('../../utils/').shiftPositions;
+var getSectionNumFromPath = require('../../utils/').getSectionNumFromPath;
 var cleanInstanceCreationsArr = require('../../utils/').cleanInstanceCreationsArr;
 var cleanLayerPointerLayers = require('../../utils/').cleanLayerPointerLayers;
 var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
 var findLayerPointer = require('../../utils/').findLayerPointer;
+var findLayerPointerRecursive = require('../../utils/').findLayerPointerRecursive;
 var fixYYFile = require('../../utils/').fixYYFile;
 
 var args = process.argv.splice(process.execArgv.length + 2);
@@ -13,7 +16,7 @@ var configPath = args[0] || './gms-tasks-config.json';
 
 var scriptName = 'build';
 var bigConfig = JSON.parse(fs.readFileSync(configPath));
-var config = bigConfig['build-clean-snap'];
+var config = bigConfig['build-clean'];
 Object.assign(config, bigConfig[scriptName]);
 
 log("Starting `" + scriptName + "`");
@@ -33,11 +36,15 @@ function start(callback)
       var finalJSON = JSON.parse(fixYYFile(fs.readFileSync(exportRoomPath, {encoding:'utf8', flag:'r'})));
       finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrder_InsertAt);
       
-      var layerPointer = findLayerPointer(finalJSON, config.layerToInsertName);
+      var layerPointer = findLayerPointer(finalJSON, config.instanceLayerToInsertName);
+      var tilePointer = findLayerPointer(finalJSON, config.tileLayerToInsertName);
     
-      if (layerPointer)
+      if (layerPointer && tilePointer)
       {
         cleanLayerPointerLayers(layerPointer);
+        cleanLayerPointerLayers(tilePointer);
+        
+        constructTilePointer(tilePointer, config.tiles);
         
         var newPattern = [
           config.roomDir + config.copyRoomPattern + "*/*.yy",
@@ -45,10 +52,11 @@ function start(callback)
         .concat(updateIgnoreRoomsBuild())
         .concat([concatIgnoreRoom(config.exportRoom)]);
         
-        return globby(newPattern).then(function(paths) {
+        return globby(newPattern).then(function(paths) {          
           for (var i=0; i<paths.length; i++)
           {
-            copyRoomToTheRoom(finalJSON, layerPointer, paths[i]);
+            copyInstancesFromRoomToTheRoom(finalJSON, layerPointer, paths[i]);
+            copyTilesFromRoomToTheRoom(tilePointer, paths[i], config.tiles);
           }
           
           var str = JSON.stringify(finalJSON);
@@ -92,11 +100,150 @@ function copyInstanceCreationCode(callback)
   });
 }
 
-function copyRoomToTheRoom(finalJSON, layerPointer, path)
+function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
+{  
+  var workingJSON = JSON.parse(fixYYFile(fs.readFileSync(path, {encoding:'utf8', flag:'r'})));
+
+  var workingLayerPointer = findLayerPointer(workingJSON, config.tileLayerToInsertName);
+    
+  var sectionObj = getSectionNumFromPath(path);
+  
+  //rooms are assumed to be 9 sections wide (TODO probably make this configurable)
+  var entireRoomRowTiles = (config.sectionWidth * 9) / config.gridSize;
+  
+  //sections are assumed to be 3x3 in size
+  var entireSectionRowTiles = (config.sectionWidth * 3) / config.gridSize;
+  
+  var sectionRowTiles = config.sectionWidth / config.gridSize;
+  var sectionColumnTiles = config.sectionHeight / config.gridSize;
+  
+  for (var k=0; k<tiles.length; k++)
+  {
+    var obj = tiles[k];
+    
+    if (obj.layers)
+    {
+      copyTilesFromRoomToTheRoom(layerPointer, path, obj.layers);
+    }
+    else
+    {
+      var workingTileLayer = findLayerPointerRecursive(workingLayerPointer, obj.name);
+      
+      //optimization -- if we don't have that layer in this room section, then don't run the code
+      //since we have already written 0's to the TileSerialiseData array
+      if (workingTileLayer)
+      {
+        var currentTileLayer = findLayerPointerRecursive(layerPointer, obj.name);
+        
+        for (var i=0; i<sectionColumnTiles; i++)
+        {
+          for (var j=0; j<sectionRowTiles; j++)
+          {        
+            //assumed at 1x1 right now -- which is why the shift
+            var workingIndex = (1 * entireSectionRowTiles * sectionColumnTiles) + (1 * sectionRowTiles);
+            workingIndex += (i * entireSectionRowTiles) + j;
+            
+            var currentIndex = (sectionObj.top * entireRoomRowTiles * sectionColumnTiles) + (sectionObj.left * sectionRowTiles);
+            currentIndex += (i * entireRoomRowTiles) + j;
+            
+            var tile = workingTileLayer.tiles.TileSerialiseData[workingIndex];
+            currentTileLayer.tiles.TileSerialiseData[currentIndex] = tile;
+          }
+        }
+      }
+    }
+  }
+}
+
+function constructTilePointer(tilePointer, tiles)
+{
+  var tileLayer = {
+    "tilesetId": {
+      "name": undefined, //"tls_overlay_backgrounds",
+      "path": undefined, //"tilesets/tls_overlay_backgrounds/tls_overlay_backgrounds.yy",
+    },
+    "x": 0,
+    "y": 0,
+    "tiles": {
+      "SerialiseWidth": (9 * config.sectionWidth) / config.gridSize,
+      "SerialiseHeight": (9 * config.sectionHeight) / config.gridSize,
+      "TileSerialiseData": [],
+    },
+    "visible":true,
+    "depth": undefined, //2400,
+    "userdefinedDepth": false,
+    "inheritLayerDepth": false,
+    "inheritLayerSettings": false,
+    "gridX": config.gridSize,
+    "gridY": config.gridSize,
+    "layers": [],
+    "hierarchyFrozen": false,
+    "resourceVersion": "1.0",
+    "name": undefined,//"bg_outside_overlay",
+    "tags": [],
+    "resourceType": "GMRTileLayer",
+  };
+  
+  var folderLayer = {
+    "visible": true,
+    "depth": undefined, //600,
+    "userdefinedDepth":false,
+    "inheritLayerDepth":false,
+    "inheritLayerSettings":false,
+    "gridX": config.gridSize,
+    "gridY": config.gridSize,
+    "layers": [],
+    "hierarchyFrozen": false,
+    "resourceVersion": "1.0",
+    "name": undefined, //"tiles"
+    "tags": [],
+    "resourceType": "GMRLayer",
+  };
+  
+  for (var i=0; i<tiles.length; i++)
+  {
+    var obj = tiles[i];
+    
+    if (obj.layers)
+    {      
+      var folder = JSON.parse(JSON.stringify(folderLayer));
+      folder.name = obj.name;
+      folder.depth = obj.depth;
+      
+      tilePointer.layers.push(folder);
+      
+      constructTilePointer(folder, obj.layers);
+    }
+    else
+    {      
+      var layer = JSON.parse(JSON.stringify(tileLayer));
+      layer.name = obj.name;
+      layer.depth = obj.depth;
+      
+      layer.tilesetId.name = obj.tileset.name;
+      layer.tilesetId.path = obj.tileset.path;
+      
+      //fill array with empty 0
+      var length = layer.tiles.SerialiseWidth * layer.tiles.SerialiseHeight
+      for (var j=0; j<length; j++)
+      {
+        layer.tiles.TileSerialiseData[j] = 0;
+      }
+      
+      tilePointer.layers.push(layer);
+    }
+  };
+}
+
+function copyInstancesFromRoomToTheRoom(finalJSON, layerPointer, path)
 {
   var workingJSON = JSON.parse(fixYYFile(fs.readFileSync(path, {encoding:'utf8', flag:'r'})));
 
-  var workingLayerPointer = findLayerPointer(workingJSON, config.layerToInsertName);
+  var workingLayerPointer = findLayerPointer(workingJSON, config.instanceLayerToInsertName);
+  
+  var shiftObj = getShift(getSectionNumFromPath(path));
+  
+  shiftPositions(workingLayerPointer, shiftObj.left, shiftObj.top);
   
   //section rooms still have the first few objects in creation
   var workingInstanceCreationOrder = workingJSON.instanceCreationOrder.slice(config.instanceCreationOrder_InsertAt);
@@ -111,6 +258,18 @@ function copyRoomToTheRoom(finalJSON, layerPointer, path)
   finalJSON.instanceCreationOrder = finalJSON.instanceCreationOrder.concat(workingInstanceCreationOrder);
   
   layerPointer.layers = layerPointer.layers.concat(workingLayerPointer.layers);
+}
+
+function getShift(sectionObj)
+{
+  var left = sectionObj.left * config.sectionWidth;
+  var top = sectionObj.top * config.sectionHeight
+  
+  //since all rooms start at section 1x1, even in room sections, we need to offset that
+  return {
+    left: -config.sectionWidth + left,
+    top: -config.sectionHeight + top,
+  };
 }
 
 function updateIgnoreRoomsBuild()

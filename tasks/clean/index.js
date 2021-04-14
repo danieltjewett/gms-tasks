@@ -12,7 +12,7 @@ var configPath = args[0] || './gms-tasks-config.json';
 
 var scriptName = 'clean';
 var bigConfig = JSON.parse(fs.readFileSync(configPath));
-var config = bigConfig['build-clean-snap'];
+var config = bigConfig['build-clean'];
 Object.assign(config, bigConfig[scriptName]);
 
 log("Starting `" + scriptName + "`");
@@ -32,11 +32,13 @@ function start(callback)
       var finalJSON = JSON.parse(fixYYFile(fs.readFileSync(exportRoomPath, {encoding:'utf8', flag:'r'})));
       finalJSON = cleanInstanceCreationsArr(finalJSON, config.instanceCreationOrder_InsertAt);
       
-      var layerPointer = findLayerPointer(finalJSON, config.layerToInsertName);
+      var layerPointer = findLayerPointer(finalJSON, config.instanceLayerToInsertName);
+      var tilePointer = findLayerPointer(finalJSON, config.tileLayerToInsertName);
     
-      if (layerPointer)
+      if (layerPointer && tilePointer)
       {
         cleanLayerPointerLayers(layerPointer);
+        cleanLayerPointerLayers(tilePointer);
         
         var str = JSON.stringify(finalJSON);
         fs.writeFileSync(exportRoomPath, str);

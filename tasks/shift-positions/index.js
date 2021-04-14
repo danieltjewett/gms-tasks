@@ -2,6 +2,7 @@ var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 
+var shiftPositions = require('../../utils/').shiftPositions;
 var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
 var findLayerPointer = require('../../utils/').findLayerPointer;
 
@@ -25,7 +26,7 @@ function start(callback)
   var pattern = [
     config.roomDir + "**/*",
   ]
-  .concat(updateIgnoreRoomsSnap());
+  .concat(updateIgnoreRoomsShift());
   
   return globby(pattern).then(function(paths){
     for (var i=0; i<paths.length; i++)
@@ -36,7 +37,7 @@ function start(callback)
   
       var workingLayerPointer = findLayerPointer(workingJSON, config.layerToInsertName);
       
-      fixPositions(workingLayerPointer);
+      shiftPositions(workingLayerPointer, config.left, config.top);
       
       var str = JSON.stringify(workingJSON);
       fs.writeFileSync(path, str);
@@ -46,39 +47,13 @@ function start(callback)
   });
 }
 
-function fixPositions(jsonLayer, searchId, replaceId, nested)
-{
-  var gridSize = config.gridSize * .5;
-
-	for (var i=0; i<jsonLayer.layers.length; i++)
-	{
-		var layer = jsonLayer.layers[i];
-    
-		if (layer.instances)
-		{
-			for (var j=0; j<layer.instances.length; j++)
-			{
-				var inst = layer.instances[j];
-				
-        //log("Still need to check if instance is a wall");
-        //process.exit();
-        
-				inst.x = Math.round(inst.x / gridSize) * gridSize;
-        inst.y = Math.round(inst.y / gridSize) * gridSize;
-			}
-		}
-		
-		fixPositions(layer);
-	}
-}
-
-function updateIgnoreRoomsSnap()
+function updateIgnoreRoomsShift()
 {
   var arr = [];
   
-  for (var i in config.ignoreRoomsSnap)
+  for (var i in config.ignoreRooms)
   {
-    var room = config.ignoreRoomsSnap[i];
+    var room = config.ignoreRooms[i];
     arr.push(concatIgnoreRoom(config.roomDir, room));
   }
   
