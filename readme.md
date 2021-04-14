@@ -22,7 +22,7 @@ For GMS 2.3, use version 0.3.
     "make-gm-sprites-from-strips": "node node_modules/gms-tasks/tasks/make-gm-sprites-from-strips/index.js ./gms-tasks-config.json",
     "clean": "node node_modules/gms-tasks/tasks/clean/index.js ./gms-tasks-config.json",
     "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json",
-    "snap": "node node_modules/gms-tasks/tasks/snap/index.js ./gms-tasks-config.json",
+    "shift-positions": "node node_modules/gms-tasks/tasks/shift-positions/index.js ./gms-tasks-config.json",
     "disable-rooms": "node node_modules/gms-tasks/tasks/disable-rooms/index.js ./gms-tasks-config.json",
     "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json"
  },
@@ -38,7 +38,7 @@ To learn more about the individual tasks and how to configure them, each task ha
 * Generate Map - `npm run generate-map`
 * Export GM Sprites As Strips - `npm run export-gm-sprites-as-strips`
 * Make GM Sprites From Strips - `npm run make-gm-sprites-from-strips`
-* Snap - `npm run snap`
+* Shift Positions - `npm run shift-positions`
 * Disable Rooms - `npm run disable-rooms`
 * Enable Rooms - `npm run enable-rooms`
 

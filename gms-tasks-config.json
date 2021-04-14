@@ -47,12 +47,32 @@
     "outputDirectory": "./yy/",
     "spritesFolder": "Sprites"
   },
-  "build-clean-snap": {
-    "roomDir": "./rooms/",
+  "build-clean": {
+    "roomDir": "rooms/",
     "exportRoom": "room_Kickstarter",
     "copyRoomPattern": "room_Kick_",
     "instanceCreationOrder_InsertAt": 7,
-    "layerToInsertName": "instances"
+    "instanceLayerToInsertName": "instances",
+    "tileLayerToInsertName": "tiles",
+    "gridSize": 32,
+    "sectionWidth": 2880,
+    "sectionHeight": 2880,
+    "tiles": [
+      {
+        "name": "ceilings",
+        "depth": 400,
+        "layers": [
+          {
+            "name": "ceilings_outside_layerDepth0",
+            "depth": 600,
+            "tileset": {
+              "name":"tls_ceilings",
+              "path":"tilesets/tls_ceilings/tls_ceilings.yy"
+            }
+          }
+        ]
+      }
+    ]
   },
   "clean": {},
   "build": {
@@ -61,9 +81,12 @@
       "room_Kick_Temp"
     ]
   },
-  "snap": {
-    "gridSize": 32,
-    "ignoreRoomsSnap": [
+  "shift-positions": {
+    "roomDir": "./rooms/",
+    "copyRoomPattern": "room_Kick_",
+    "left": 100,
+    "top": 100,
+    "ignoreRooms": [
       "room_Opening",
       "room_parent"
     ]
