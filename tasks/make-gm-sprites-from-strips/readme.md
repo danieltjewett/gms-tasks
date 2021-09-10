@@ -11,31 +11,38 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
     "grid": 32,
     "animations": {
       "Walk_Up": {
-        "index": 8,
+        "row": 8,
+        "start": 0,
         "frames": 9
       },
       "Walk_Left": {
-        "index": 9,
+        "row": 9,
+        "start": 0,
         "frames": 9
       },
       "Walk_Down": {
-        "index": 10,
+        "row": 10,
+        "start": 0,
         "frames": 9
       },
       "Walk_Right": {
-        "index": 11,
+        "row": 11,
+        "start": 0,
         "frames": 9
       },
       "Death": {
-        "index": 20,
+        "row": 20,
+        "start": 0,
         "frames": 6
       },
       "Hurt": {
-        "index": 20,
+        "row": 20,
+        "start": 0,
         "frames": 3
       },
       "Unhurt": {
-        "index": 20,
+        "row": 20,
+        "start": 0,
         "frames": 3,
         "reverse": true
       }
@@ -50,7 +57,8 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 * `make-gm-sprites-from-strips` - these change the config values for this command
 * `animations` - a list of animations to create from the strip
 * `Animation_Name` - the name of the animation to make from the strip image
-* `index` - the row of the strip to read from (zero based)
+* `row` - the row of the strip to read from (zero based)
+* `start` - the start frame (column) of the strip to read from (zero based)
 * `frames` - how many frames to read from that row
 * `reverse` - whether to create the sprite with the frames reversed
 * `prefixStr` - the prefix to name the sprite (will be concantated with Animation_Name)
