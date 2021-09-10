@@ -2,7 +2,7 @@ var log = require('fancy-log');
 var fs = require('fs');
 var globby = require('globby');
 var jimp = require('jimp');
-var uuidv1 = require('uuid/v1');
+var uuidv1 = require('uuid').v1;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -197,8 +197,7 @@ function importStrip(path, stripName)
 
   return new Promise(function(resolve, reject) {
     jimp.read(path).then(function(strip) {
-      //TODO we are resizing -- not sure if the public would want that
-      strip.resize(strip.bitmap.width * .5, strip.bitmap.height * .5, jimp.RESIZE_NEAREST_NEIGHBOR, function(err, stripImage) {        
+      strip.resize(strip.bitmap.width, strip.bitmap.height, jimp.RESIZE_NEAREST_NEIGHBOR, function(err, stripImage) {        
         var promises = [];
         
         //for each animation
@@ -207,10 +206,10 @@ function importStrip(path, stripName)
           var data = config.animations[animationName];
           
           //for each frame in the animation
-          for (var i=0; i<data.frames; i++)
+          for (var i=data.start; i<data.frames; i++)
           {
             //make a seperate image
-            promises.push(makeImage(stripImage, stripName, animationName, i, data.index, data.frames, data.reverse));
+            promises.push(makeImage(stripImage, stripName, animationName, i, data.row, data.frames, data.reverse));
           }
         }
         
@@ -227,8 +226,8 @@ function makeImage(stripImage, stripName, animationName, frameIndex, verticalOff
 {
   return new Promise(function(resolve, reject) {
     new jimp(config.grid, config.grid, function(err, image) {
-      var wStart = frameIndex * config.grid; //the start of the strip image
-      var hStart = verticalOffset * config.grid; //the start of the strip image
+      var wStart = frameIndex * config.grid + frameIndex * config.separation; //the start of the strip image
+      var hStart = verticalOffset * config.grid + verticalOffset * config.separation; //the start of the strip image
       
       var wEnd = wStart + config.grid; //how far to copy
       var hEnd = hStart + config.grid; //how far to copy
