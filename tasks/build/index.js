@@ -131,7 +131,8 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
       
       //optimization -- if we don't have that layer in this room section, then don't run the code
       //since we have already written 0's to the TileSerialiseData array
-      if (workingTileLayer)
+      //also check if the layer has a tileset (vs asset)
+      if (workingTileLayer && obj.tileset)
       {
         var currentTileLayer = findLayerPointerRecursive(layerPointer, obj.name);
         
@@ -184,6 +185,23 @@ function constructTilePointer(tilePointer, tiles)
     "resourceType": "GMRTileLayer",
   };
   
+  var assetLayer = {
+    "assets": [],
+    "visible": true,
+    "depth": undefined, //1600
+    "userdefinedDepth": false,
+    "inheritLayerDepth": false,
+    "inheritLayerSettings":false,
+    "gridX": config.gridSize,
+    "gridY": config.gridSize,
+    "layers": [],
+    "hierarchyFrozen": false,
+    "resourceVersion": "1.0",
+    "name": undefined, //"bg_outside_sprite_layerDepth1",
+    "tags":[],
+    "resourceType": "GMRAssetLayer",
+  };
+  
   var folderLayer = {
     "visible": true,
     "depth": undefined, //600,
@@ -215,22 +233,35 @@ function constructTilePointer(tilePointer, tiles)
       constructTilePointer(folder, obj.layers);
     }
     else
-    {      
-      var layer = JSON.parse(JSON.stringify(tileLayer));
-      layer.name = obj.name;
-      layer.depth = obj.depth;
-      
-      layer.tilesetId.name = obj.tileset.name;
-      layer.tilesetId.path = obj.tileset.path;
-      
-      //fill array with empty 0
-      var length = layer.tiles.SerialiseWidth * layer.tiles.SerialiseHeight
-      for (var j=0; j<length; j++)
+    {
+      if (obj.tileset)
       {
-        layer.tiles.TileSerialiseData[j] = 0;
+        var layer = JSON.parse(JSON.stringify(tileLayer));
+        layer.name = obj.name;
+        layer.depth = obj.depth;
+        
+        layer.tilesetId.name = obj.tileset.name;
+        layer.tilesetId.path = obj.tileset.path;
+        
+        //fill array with empty 0
+        var length = layer.tiles.SerialiseWidth * layer.tiles.SerialiseHeight
+        for (var j=0; j<length; j++)
+        {
+          layer.tiles.TileSerialiseData[j] = 0;
+        }
+        
+        tilePointer.layers.push(layer);
       }
-      
-      tilePointer.layers.push(layer);
+      else
+      {
+        var layer = JSON.parse(JSON.stringify(assetLayer));
+        layer.name = obj.name;
+        layer.depth = obj.depth;
+        
+        //maybe later fill assets array with stuff
+        
+        tilePointer.layers.push(layer);
+      }
     }
   };
 }

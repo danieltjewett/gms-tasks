@@ -284,7 +284,7 @@ function makeSprites(stripName, animationName, yyData, data)
     yyData.layers.push(layerData);
     
     //for each frame data, make seperate image data, since that is how yy files work
-    for (var i=0; i<data.frames; i++)
+    for (var i=data.start; i<data.frames; i++)
     {
       promises.push(writeSpriteImage(i, yyData, spriteName, layerId));
     }
