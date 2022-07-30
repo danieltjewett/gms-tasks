@@ -11,6 +11,10 @@ exports.shiftPositions = function(jsonLayer, left, top) {
         
         inst.x += left;
         inst.y += top;
+        
+        //gms 2022.5.0.8 seemed to enforce names being unique across ALL rooms, so we need to account for that
+        //hackishly add in the shift since we're already here
+        inst.name += "_"; 
       }
     }
     

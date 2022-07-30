@@ -284,6 +284,10 @@ function copyInstancesFromRoomToTheRoom(finalJSON, layerPointer, path)
   {
     var obj = workingInstanceCreationOrder[i];
     obj.path = config.roomDir + config.exportRoom + "/" + config.exportRoom + ".yy";
+    
+    //gms 2022.5.0.8 seemed to enforce names being unique across ALL rooms, so we need to account for that
+    //hackishly add since we're already here
+    obj.name += "_";
   }
   
   finalJSON.instanceCreationOrder = finalJSON.instanceCreationOrder.concat(workingInstanceCreationOrder);
