@@ -91,7 +91,13 @@ function copyInstanceCreationCode(callback)
     for (var i=0; i<paths.length; i++)
     {
       var path = paths[i];
-      var fileName = path.substr(path.lastIndexOf("/") + 1); //get file name with extension
+      var fileNameWithExt = path.substr(path.lastIndexOf("/") + 1); //get file name with extension
+      var fileName = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf(".")); //just the filename
+      var extension = fileNameWithExt.substr(fileNameWithExt.lastIndexOf(".") + 1); //just the extension
+      
+      //gms 2022.5.0.8 seemed to enforce names being unique across ALL rooms, so we need to account for that
+      //hackishly add since we're already here
+      fileName += "_";
       
       fs.copyFileSync(path, config.roomDir + config.exportRoom + "/" + fileName);
     }
