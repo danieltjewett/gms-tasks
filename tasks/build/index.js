@@ -99,7 +99,7 @@ function copyInstanceCreationCode(callback)
       //hackishly add since we're already here
       fileName += "_";
       
-      fs.copyFileSync(path, config.roomDir + config.exportRoom + "/" + fileName);
+      fs.copyFileSync(path, config.roomDir + config.exportRoom + "/" + fileName + "." + extension);
     }
     
     return callback();
