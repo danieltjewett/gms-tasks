@@ -98,10 +98,125 @@ exports.concatIgnoreRoom = function(roomDir, dir) {
 }
 
 exports.fixYYFile = function(input) {
-  var regex = /\,(?!\s*?[\{\[\"\'\w])/g;
+  var regex = /\,(?!\s*?[\{\[\"\'\w\-])/g;
   return input.replace(regex, ''); // remove all trailing commas
 }
 
 exports.string_digits = function(str) {
   return str.replace(/\D/g, "");
+}
+
+exports.compressTiles = function(arr) {
+  var newArr = [];
+  var tempArr = [];
+  
+  var num = -1;
+  var previousData = arr[0];
+  
+  for (var i=1; i<arr.length; i++)
+  {
+    //if the previous data is the same as the current data
+    if (previousData === arr[i])
+    {
+      //if we have a streak again, but we have data on the tempArr, we need to push the data from the tempArr onto our real array
+      if (tempArr.length > 0)
+      {
+        //first push the current positive number
+        newArr.push(num);
+        
+        //then push all the unique values
+        for (var j=0; j<tempArr.length; j++)
+        {
+          newArr.push(tempArr[j]);
+        }
+        
+        //reset
+        tempArr = [];
+        num = -1;
+      }
+      
+      num --;
+    }
+    else //the data is not the same and need to write most likely
+    {
+      //values of num less than -1 means we have a streak, so we're going to push something like -10, 5 which means there are 10 streaks of 5
+      if (num < -1)
+      {
+        newArr.push(num, previousData);
+        
+        //reset
+        num = -1;
+        previousData = arr[i];
+      }
+      else //if we have numbers not the same more than once, we'll do one of two things:
+      {
+        //if it is the first time, (num == -1), we'll change to positive world (by resetting num to 0).
+        if (num == -1)
+        {
+          num = 0;
+        }
+        
+        //All other unique number scenarios will increment num (as oppose to decrement) and will push the unique val onto a tempArr
+        num ++;
+        tempArr.push(previousData);
+        
+        previousData = arr[i];
+      }
+    }
+  }
+  
+  //terminating, push on whatever is left
+  if (tempArr.length > 0)
+  {
+    //first push the current positive number
+    newArr.push(num);
+    
+    //then push all the unique values
+    for (var j=0; j<tempArr.length; j++)
+    {
+      newArr.push(tempArr[j]);
+    }
+  }
+  else
+  {
+    //steak
+    newArr.push(num, previousData);
+  }
+  
+  return newArr;
+}
+
+exports.uncompressTiles = function(arr) {
+  var newArr = [];
+  
+  var i=0;
+  while (i<arr.length)
+  {
+    //negative cases means "steak", so we're going to put data on n times.
+    if (arr[i] < 0)
+    {
+      var num = Math.abs(arr[i]);
+      var data = arr[i + 1];
+      
+      for (var j=0; j<num; j++)
+      {
+        newArr.push(data);
+      }
+      
+      i += 2;
+    }
+    else //positive cases mean unique numbers n times.  So for n, we push on the unique value in arr
+    {
+      var num = arr[i];
+      for (var j=0; j<num; j++)
+      {
+        i++;
+        newArr.push(arr[i]);
+      }
+      
+      i++;
+    }
+  }
+  
+  return newArr;
 }

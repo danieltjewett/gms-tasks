@@ -10,6 +10,8 @@ var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
 var findLayerPointer = require('../../utils/').findLayerPointer;
 var findLayerPointerRecursive = require('../../utils/').findLayerPointerRecursive;
 var fixYYFile = require('../../utils/').fixYYFile;
+var compressTiles = require('../../utils/').compressTiles;
+var uncompressTiles = require('../../utils/').uncompressTiles;
 
 var args = process.argv.splice(process.execArgv.length + 2);
 var configPath = args[0] || './gms-tasks-config.json';
@@ -58,6 +60,8 @@ function start(callback)
             copyInstancesFromRoomToTheRoom(finalJSON, layerPointer, paths[i]);
             copyTilesFromRoomToTheRoom(tilePointer, paths[i], config.tiles);
           }
+          
+          compressBuildRoomTiles(tilePointer);
           
           var str = JSON.stringify(finalJSON);
           fs.writeFileSync(exportRoomPath, str);
@@ -142,6 +146,9 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
       {
         var currentTileLayer = findLayerPointerRecursive(layerPointer, obj.name);
         
+        //Game Maker 2022.8 introduced compressed tiles, so we're going uncompress it
+        workingTileLayer.tiles.TileSerialiseData = uncompressTiles(workingTileLayer.tiles.TileCompressedData);
+        
         for (var i=0; i<sectionColumnTiles; i++)
         {
           for (var j=0; j<sectionRowTiles; j++)
@@ -157,6 +164,8 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
             currentTileLayer.tiles.TileSerialiseData[currentIndex] = tile;
           }
         }
+        
+        delete workingTileLayer.tiles.TileSerialiseData;
       }
     }
   }
@@ -172,9 +181,10 @@ function constructTilePointer(tilePointer, tiles)
     "x": 0,
     "y": 0,
     "tiles": {
+      "TileDataFormat": 1,
       "SerialiseWidth": (9 * config.sectionWidth) / config.gridSize,
       "SerialiseHeight": (9 * config.sectionHeight) / config.gridSize,
-      "TileSerialiseData": [],
+      "TileCompressedData": [],
     },
     "visible":true,
     "depth": undefined, //2400,
@@ -185,7 +195,7 @@ function constructTilePointer(tilePointer, tiles)
     "gridY": config.gridSize,
     "layers": [],
     "hierarchyFrozen": false,
-    "resourceVersion": "1.0",
+    "resourceVersion": "1.1",
     "name": undefined,//"bg_outside_overlay",
     "tags": [],
     "resourceType": "GMRTileLayer",
@@ -249,8 +259,11 @@ function constructTilePointer(tilePointer, tiles)
         layer.tilesetId.name = obj.tileset.name;
         layer.tilesetId.path = obj.tileset.path;
         
+        //Game Maker 2022.8 introduced compressed tiles, so we're going to temporarily keep it serialized
+        layer.tiles.TileSerialiseData = [];
+        
         //fill array with empty 0
-        var length = layer.tiles.SerialiseWidth * layer.tiles.SerialiseHeight
+        var length = layer.tiles.SerialiseWidth * layer.tiles.SerialiseHeight;
         for (var j=0; j<length; j++)
         {
           layer.tiles.TileSerialiseData[j] = 0;
@@ -269,7 +282,25 @@ function constructTilePointer(tilePointer, tiles)
         tilePointer.layers.push(layer);
       }
     }
-  };
+  }
+}
+
+function compressBuildRoomTiles(tilePointer)
+{
+  for (var i=0; i<tilePointer.layers.length; i++)
+  {
+    var obj = tilePointer.layers[i];
+    
+    if (obj.layers.length > 0)
+    {
+      compressBuildRoomTiles(obj);
+    }
+    else if (obj.tiles)
+    {
+      obj.tiles.TileCompressedData = compressTiles(obj.tiles.TileSerialiseData);
+      delete obj.tiles.TileSerialiseData;
+    }
+  }
 }
 
 function copyInstancesFromRoomToTheRoom(finalJSON, layerPointer, path)
