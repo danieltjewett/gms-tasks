@@ -52,7 +52,7 @@ function start(callback)
           config.roomDir + config.copyRoomPattern + "*/*.yy",
         ]
         .concat(updateIgnoreRoomsBuild())
-        .concat([concatIgnoreRoom(config.exportRoom)]);
+        .concat([concatIgnoreRoom(config.exportRoom, '')]);
         
         return globby(newPattern).then(function(paths) {          
           for (var i=0; i<paths.length; i++)
