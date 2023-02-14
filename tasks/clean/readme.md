@@ -2,6 +2,8 @@
 
 The purpose of the `clean` command is "clean" the main room from the `build` command -- essentially reverting the main room to its former state.
 
+As of 0.6.0, we decided to add `npm run enable-rooms` when running the `clean` command (and the inverse `npm run disable-rooms` when running the `build` command).  This is because 2022.5.0.8 seemed to enforce instance names in the room editor being unique across ALL rooms, and it has become easier to remove the rooms with the original, duplicate instances.
+
 ## Installation
 
 In the config file `gms-tasks-config.json`, we have these values that we can configure:

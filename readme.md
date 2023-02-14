@@ -11,7 +11,7 @@ This package requires NPM and Node.js, which can be downloaded at https://nodejs
 **NOTE**
 
 For GMS 2.2, use version 0.2.
-For GMS 2.3, use version 0.3.
+For GMS 2.3 and beyond, use the latest version.
 
 2. Add this to the `scripts` in your `package.json` file:
 ```
@@ -20,13 +20,16 @@ For GMS 2.3, use version 0.3.
     "export-gm-sprites-as-strips": "node node_modules/gms-tasks/tasks/export-gm-sprites-as-strips/index.js ./gms-tasks-config.json",
     "generate-map": "node node_modules/gms-tasks/tasks/generate-map/index.js ./gms-tasks-config.json",
     "make-gm-sprites-from-strips": "node node_modules/gms-tasks/tasks/make-gm-sprites-from-strips/index.js ./gms-tasks-config.json",
-    "clean": "node node_modules/gms-tasks/tasks/clean/index.js ./gms-tasks-config.json",
-    "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json",
+    "clean": "node node_modules/gms-tasks/tasks/clean/index.js ./gms-tasks-config.json && npm run enable-rooms",
+    "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json && npm run disable-rooms",
     "shift-positions": "node node_modules/gms-tasks/tasks/shift-positions/index.js ./gms-tasks-config.json",
     "disable-rooms": "node node_modules/gms-tasks/tasks/disable-rooms/index.js ./gms-tasks-config.json",
     "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json"
  },
  ```
+ 
+As of 0.6.0, we decided to add `npm run disable-rooms` when running the `build` command (and the inverse `npm run enable-rooms` when running the `clean` command).  This is because 2022.5.0.8 seemed to enforce instance names in the room editor being unique across ALL rooms, and it has become easier to remove the rooms with the original, duplicate instances.
+ 
 3. Assuming we want to use our own config file, in the terminal run run `cp ./node_modules/gms-tasks/gms-tasks-config.json gms-tasks-config.json`
 
 ## Tasks

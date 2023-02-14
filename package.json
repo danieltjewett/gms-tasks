@@ -1,6 +1,6 @@
 {
   "name": "gms-tasks",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Adds some command line tasks for repetitive actions for Game Maker Studio 2.",
   "main": "index.js",
   "scripts": {
@@ -8,8 +8,8 @@
     "export-gm-sprites-as-strips": "node tasks/export-gm-sprites-as-strips/index.js ./gms-tasks-config.json",
     "generate-map": "node tasks/generate-map/index.js ./gms-tasks-config.json",
     "make-gm-sprites-from-strips": "node tasks/make-gm-sprites-from-strips/index.js ./gms-tasks-config.json",
-    "clean": "node tasks/clean/index.js ./gms-tasks-config.json",
-    "build": "npm run clean && node tasks/build/index.js ./gms-tasks-config.json",
+    "clean": "node node_modules/gms-tasks/tasks/clean/index.js ./gms-tasks-config.json && npm run enable-rooms",
+    "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json && npm run disable-rooms",
     "shift-positions": "node tasks/shift-positions/index.js ./gms-tasks-config.json",
     "disable-rooms": "node tasks/disable-rooms/index.js ./gms-tasks-config.json",
     "enable-rooms": "node tasks/enable-rooms/index.js ./gms-tasks-config.json"

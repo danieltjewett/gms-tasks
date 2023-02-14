@@ -4,6 +4,8 @@ The purpose of the `build` command is to take instances and tiles in several roo
 
 Let's say we are building an open world game in Game Maker Studio 2.  We've found that after a while, using the room editor with thousands of instances makes the room editor slow and unusable.  The solution is to create "sections" of each room, in a 3x3 size, where the middle section is the working content.  Then, when it comes time to "test" the game in the "main" room, we can run `npm run build` to merge these instances and tiles into the one room.
 
+As of 0.6.0, we decided to add `npm run disable-rooms` when running the `build` command (and the inverse `npm run enable-rooms` when running the `clean` command).  This is because 2022.5.0.8 seemed to enforce instance names in the room editor being unique across ALL rooms, and it has become easier to remove the rooms with the original, duplicate instances.
+
 ## Installation
 
 In the config file `gms-tasks-config.json`, we have these values that we can configure:
