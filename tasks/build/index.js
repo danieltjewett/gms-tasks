@@ -114,8 +114,7 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
     
   var sectionObj = getSectionNumFromPath(path);
   
-  //rooms are assumed to be 9 sections wide (TODO probably make this configurable)
-  var entireRoomRowTiles = (config.sectionWidth * 9) / config.gridSize;
+  var entireRoomRowTiles = (config.sectionWidth * config.horizontalSectionsCount) / config.gridSize;
   
   //sections are assumed to be 3x3 in size
   var entireSectionRowTiles = (config.sectionWidth * 3) / config.gridSize;
@@ -178,8 +177,8 @@ function constructTilePointer(tilePointer, tiles)
     "y": 0,
     "tiles": {
       "TileDataFormat": 1,
-      "SerialiseWidth": (9 * config.sectionWidth) / config.gridSize,
-      "SerialiseHeight": (9 * config.sectionHeight) / config.gridSize,
+      "SerialiseWidth": (config.horizontalSectionsCount * config.sectionWidth) / config.gridSize,
+      "SerialiseHeight": (config.verticalSectionsCount * config.sectionHeight) / config.gridSize,
       "TileCompressedData": [],
     },
     "visible":true,

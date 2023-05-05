@@ -57,6 +57,8 @@
     "gridSize": 32,
     "sectionWidth": 2880,
     "sectionHeight": 2880,
+	"horizontalSectionsCount": 9,
+	"verticalSectionsCount": 9,
     "tiles": [
       {
         "name": "ceilings",

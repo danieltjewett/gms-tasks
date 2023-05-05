@@ -21,6 +21,8 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
   "gridSize": 32,
   "sectionWidth": 2880,
   "sectionHeight": 2880,
+  "horizontalSectionsCount": 9,
+  "verticalSectionsCount": 9,
   "tiles": [
     {
       "name": "ceilings",
@@ -58,6 +60,8 @@ In the config file `gms-tasks-config.json`, we have these values that we can con
 * `gridSize` - the size of our grid -- for tiles
 * `sectionWidth` - how big our room width "sections" is
 * `sectionHeight` - how big our room height "sections" is
+* `horizontalSectionsCount` - how many horizontal sections make up our big room
+* `verticalSectionsCount` - how many vertical sections make up our big room
 * `build` - these change the config values for the `build` command only
 * `ignoreRoomsBuild` - an array of rooms to be excluded from the merge
 
