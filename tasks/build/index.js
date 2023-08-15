@@ -113,6 +113,7 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
   var workingLayerPointer = findLayerPointer(workingJSON, config.tileLayerToInsertName);
     
   var sectionObj = getSectionNumFromPath(path);
+  var shiftObj = getShift(sectionObj);
   
   var entireRoomRowTiles = (config.sectionWidth * config.horizontalSectionsCount) / config.gridSize;
   
@@ -135,32 +136,46 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
       var workingTileLayer = findLayerPointerRecursive(workingLayerPointer, obj.name);
       
       //optimization -- if we don't have that layer in this room section, then don't run the code
-      //since we have already written 0's to the TileSerialiseData array
-      //also check if the layer has a tileset (vs asset)
-      if (workingTileLayer && obj.tileset)
+      if (workingTileLayer)
       {
         var currentTileLayer = findLayerPointerRecursive(layerPointer, obj.name);
         
-        //Game Maker 2022.8 introduced compressed tiles, so we're going uncompress it
-        workingTileLayer.tiles.TileSerialiseData = uncompressTiles(workingTileLayer.tiles.TileCompressedData);
-        
-        for (var i=0; i<sectionColumnTiles; i++)
+        if (obj.tileset)
         {
-          for (var j=0; j<sectionRowTiles; j++)
-          {        
-            //assumed at 1x1 right now -- which is why the shift
-            var workingIndex = (1 * entireSectionRowTiles * sectionColumnTiles) + (1 * sectionRowTiles);
-            workingIndex += (i * entireSectionRowTiles) + j;
+          //Game Maker 2022.8 introduced compressed tiles, so we're going uncompress it
+          workingTileLayer.tiles.TileSerialiseData = uncompressTiles(workingTileLayer.tiles.TileCompressedData);
+          
+          for (var i=0; i<sectionColumnTiles; i++)
+          {
+            for (var j=0; j<sectionRowTiles; j++)
+            {        
+              //assumed at 1x1 right now -- which is why the shift
+              var workingIndex = (1 * entireSectionRowTiles * sectionColumnTiles) + (1 * sectionRowTiles);
+              workingIndex += (i * entireSectionRowTiles) + j;
+              
+              var currentIndex = (sectionObj.top * entireRoomRowTiles * sectionColumnTiles) + (sectionObj.left * sectionRowTiles);
+              currentIndex += (i * entireRoomRowTiles) + j;
+              
+              var tile = workingTileLayer.tiles.TileSerialiseData[workingIndex];
+              currentTileLayer.tiles.TileSerialiseData[currentIndex] = tile;
+            }
+          }
+          
+          delete workingTileLayer.tiles.TileSerialiseData;
+        }
+        else
+        {          
+          //copy asset and shift its position
+          for (var i=0; i<workingTileLayer.assets.length; i++)
+          {
+            var obj = workingTileLayer.assets[i];
             
-            var currentIndex = (sectionObj.top * entireRoomRowTiles * sectionColumnTiles) + (sectionObj.left * sectionRowTiles);
-            currentIndex += (i * entireRoomRowTiles) + j;
+            obj.x += shiftObj.left;
+            obj.y += shiftObj.top;
             
-            var tile = workingTileLayer.tiles.TileSerialiseData[workingIndex];
-            currentTileLayer.tiles.TileSerialiseData[currentIndex] = tile;
+            currentTileLayer.assets.push(obj);
           }
         }
-        
-        delete workingTileLayer.tiles.TileSerialiseData;
       }
     }
   }
@@ -271,8 +286,6 @@ function constructTilePointer(tilePointer, tiles)
         var layer = JSON.parse(JSON.stringify(assetLayer));
         layer.name = obj.name;
         layer.depth = obj.depth;
-        
-        //maybe later fill assets array with stuff
         
         tilePointer.layers.push(layer);
       }
