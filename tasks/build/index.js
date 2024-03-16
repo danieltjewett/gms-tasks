@@ -10,6 +10,7 @@ var concatIgnoreRoom = require('../../utils/').concatIgnoreRoom;
 var findLayerPointer = require('../../utils/').findLayerPointer;
 var findLayerPointerRecursive = require('../../utils/').findLayerPointerRecursive;
 var fixYYFile = require('../../utils/').fixYYFile;
+var sortObject = require('../../utils/').sortObject;
 var compressTiles = require('../../utils/').compressTiles;
 var uncompressTiles = require('../../utils/').uncompressTiles;
 
@@ -183,65 +184,89 @@ function copyTilesFromRoomToTheRoom(layerPointer, path, tiles)
 
 function constructTilePointer(tilePointer, tiles)
 {
+  //Game Maker 2024.2 introduced alphabetizing keys (WHY?)
   var tileLayer = {
-    "tilesetId": {
+	"$GMRTileLayer":"",
+	"%Name": undefined,//"bg_outside_overlay",
+    "depth": undefined, //2400,
+    "effectEnabled":true,
+    "effectType":null,
+	"gridX": config.gridSize,
+    "gridY": config.gridSize,
+	"hierarchyFrozen": false,
+    "inheritLayerDepth": false,
+    "inheritLayerSettings": false,
+    "inheritSubLayers": true,
+    "inheritVisibility": true,
+    "layers": [],
+	"name": undefined,//"bg_outside_overlay",
+    "properties": [],
+    "resourceType": "GMRTileLayer",
+    "resourceVersion": "2.0",
+    "tags": [],
+	"tiles": {
+	  "SerialiseHeight": (config.verticalSectionsCount * config.sectionHeight) / config.gridSize,
+	  "SerialiseWidth": (config.horizontalSectionsCount * config.sectionWidth) / config.gridSize,
+	  "TileCompressedData": [],
+      "TileDataFormat": 1,
+    },
+	"tilesetId": {
       "name": undefined, //"tls_overlay_backgrounds",
       "path": undefined, //"tilesets/tls_overlay_backgrounds/tls_overlay_backgrounds.yy",
     },
-    "x": 0,
-    "y": 0,
-    "tiles": {
-      "TileDataFormat": 1,
-      "SerialiseWidth": (config.horizontalSectionsCount * config.sectionWidth) / config.gridSize,
-      "SerialiseHeight": (config.verticalSectionsCount * config.sectionHeight) / config.gridSize,
-      "TileCompressedData": [],
-    },
-    "visible":true,
-    "depth": undefined, //2400,
-    "userdefinedDepth": false,
-    "inheritLayerDepth": false,
-    "inheritLayerSettings": false,
-    "gridX": config.gridSize,
-    "gridY": config.gridSize,
-    "layers": [],
-    "hierarchyFrozen": false,
-    "resourceVersion": "1.1",
-    "name": undefined,//"bg_outside_overlay",
-    "tags": [],
-    "resourceType": "GMRTileLayer",
+	"userdefinedDepth": false,
+	"visible":true,
+	"x": 0,
+	"y": 0,
   };
   
+  //Game Maker 2024.2 introduced alphabetizing keys (WHY?)
   var assetLayer = {
+	"$GMRAssetLayer":"",
+	"%Name": undefined,//"bg_outside_sprite_layerDepth1",
     "assets": [],
-    "visible": true,
     "depth": undefined, //1600
-    "userdefinedDepth": false,
+    "effectEnabled": true,
+    "effectType": null,
+    "gridX": config.gridSize,
+    "gridY": config.gridSize,
+	"hierarchyFrozen": false,
     "inheritLayerDepth": false,
     "inheritLayerSettings":false,
-    "gridX": config.gridSize,
-    "gridY": config.gridSize,
+    "inheritSubLayers": true,
+    "inheritVisibility": true,
     "layers": [],
-    "hierarchyFrozen": false,
-    "resourceVersion": "1.0",
     "name": undefined, //"bg_outside_sprite_layerDepth1",
+	"properties":[],
+	"resourceType": "GMRAssetLayer",
+    "resourceVersion": "2.0",
     "tags":[],
-    "resourceType": "GMRAssetLayer",
+	"userdefinedDepth": false,
+	"visible": true,
   };
   
+  //Game Maker 2024.2 introduced alphabetizing keys (WHY?)
   var folderLayer = {
-    "visible": true,
+	"$GMRLayer": "",
+	"%Name": undefined, //"tiles"
     "depth": undefined, //600,
-    "userdefinedDepth":false,
+    "effectEnabled": true,
+    "effectType": null,
+	"gridX": config.gridSize,
+    "gridY": config.gridSize,
+	"hierarchyFrozen": false,
     "inheritLayerDepth":false,
     "inheritLayerSettings":false,
-    "gridX": config.gridSize,
-    "gridY": config.gridSize,
+    "inheritSubLayers": true,
+    "inheritVisibility": true,
     "layers": [],
-    "hierarchyFrozen": false,
-    "resourceVersion": "1.0",
-    "name": undefined, //"tiles"
+	"name": undefined, //"tiles"
+    "properties":[],
+	"resourceType": "GMRLayer",
+    "resourceVersion": "2.0",
     "tags": [],
-    "resourceType": "GMRLayer",
+	"userdefinedDepth":false,
+	"visible": true,
   };
   
   for (var i=0; i<tiles.length; i++)
@@ -252,9 +277,11 @@ function constructTilePointer(tilePointer, tiles)
     {      
       var folder = JSON.parse(JSON.stringify(folderLayer));
       folder.name = obj.name;
+	  folder["%Name"] = obj.name;
       folder.depth = obj.depth;
       
-      tilePointer.layers.push(folder);
+	  //Game Maker 2024.2 introduced alphabetizing keys (WHY?)
+      tilePointer.layers.push(sortObject(folder));
       
       constructTilePointer(folder, obj.layers);
     }
@@ -264,6 +291,7 @@ function constructTilePointer(tilePointer, tiles)
       {
         var layer = JSON.parse(JSON.stringify(tileLayer));
         layer.name = obj.name;
+		layer["%Name"] = obj.name;
         layer.depth = obj.depth;
         
         layer.tilesetId.name = obj.tileset.name;
@@ -278,16 +306,21 @@ function constructTilePointer(tilePointer, tiles)
         {
           layer.tiles.TileSerialiseData[j] = 0;
         }
+		
+		//Game Maker 2024.2 introduced alphabetizing keys (WHY?)
+		layer.tiles = sortObject(layer.tiles);
         
-        tilePointer.layers.push(layer);
+        tilePointer.layers.push(sortObject(layer));
       }
       else
       {
         var layer = JSON.parse(JSON.stringify(assetLayer));
         layer.name = obj.name;
+		layer["%Name"] = obj.name;
         layer.depth = obj.depth;
         
-        tilePointer.layers.push(layer);
+		//Game Maker 2024.2 introduced alphabetizing keys (WHY?)
+        tilePointer.layers.push(sortObject(layer));
       }
     }
   }

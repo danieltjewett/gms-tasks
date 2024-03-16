@@ -102,6 +102,15 @@ exports.string_digits = function(str) {
   return str.replace(/\D/g, "");
 }
 
+exports.sortObject = function(obj) {
+  return Object.keys(obj)
+	.sort()
+	.reduce(function (acc, key) { 
+	  acc[key] = obj[key];
+	  return acc;
+	}, {});
+}
+
 exports.compressTiles = function(arr) {
   var newArr = [];
   var tempArr = [];
