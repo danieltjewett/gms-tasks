@@ -24,7 +24,8 @@ For GMS 2.3 and beyond, use the latest version.
     "build": "npm run clean && node node_modules/gms-tasks/tasks/build/index.js ./gms-tasks-config.json && npm run disable-rooms",
     "shift-positions": "node node_modules/gms-tasks/tasks/shift-positions/index.js ./gms-tasks-config.json",
     "disable-rooms": "node node_modules/gms-tasks/tasks/disable-rooms/index.js ./gms-tasks-config.json",
-    "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json"
+    "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json",
+	"steam-upload": "node node_modules/gms-tasks/tasks/steam-upload/index.js ./gms-tasks-config.json"
  },
  ```
  
@@ -44,6 +45,7 @@ To learn more about the individual tasks and how to configure them, each task ha
 * Shift Positions - `npm run shift-positions`
 * Disable Rooms - `npm run disable-rooms`
 * Enable Rooms - `npm run enable-rooms`
+* Steam Upload - `npm run steam-upload`
 
 ## Contributing
 

@@ -99,5 +99,9 @@
       "room_Kick_",
       "room_Kick_Temp"
     ]
+  },
+  "steam": {
+    "sdkDir": "C:/Users/<username>/Desktop/sdk/",
+    "simpleAppBuildVDF": "./app.vdf"
   }
 }
