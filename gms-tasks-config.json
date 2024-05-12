@@ -100,7 +100,7 @@
       "room_Kick_Temp"
     ]
   },
-  "steam": {
+  "steam-upload": {
     "sdkDir": "C:/Users/<username>/Desktop/sdk/",
     "simpleAppBuildVDF": "./app.vdf"
   }

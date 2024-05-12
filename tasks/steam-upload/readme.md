@@ -37,7 +37,7 @@ The only main file we need to add / update is our `app.vdf` file (in the same fo
 In the config file `gms-tasks-config.json`, we have these values that we can configure:
 
 ```
-"steam": {
+"steam-upload": {
   "sdkDir": "C:/Users/<username>/Desktop/sdk/",
   "simpleAppBuildVDF": "./app.vdf"
 }
