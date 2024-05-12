@@ -20,12 +20,12 @@ start(function(){
 function start(callback)
 {
   var steamArgs = [
-  "+login",
-  process.env.steam_username,
-  process.env.steam_password,
-  "+run_app_build",
-  resolve(config.simpleAppBuildVDF),
-  "+quit"
+    "+login",
+    process.env.steam_username,
+    process.env.steam_password,
+    "+run_app_build",
+    resolve(config.simpleAppBuildVDF),
+    "+quit"
   ];
   
   var cmd;
