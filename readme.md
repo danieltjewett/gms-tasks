@@ -25,7 +25,7 @@ For GMS 2.3 and beyond, use the latest version.
     "shift-positions": "node node_modules/gms-tasks/tasks/shift-positions/index.js ./gms-tasks-config.json",
     "disable-rooms": "node node_modules/gms-tasks/tasks/disable-rooms/index.js ./gms-tasks-config.json",
     "enable-rooms": "node node_modules/gms-tasks/tasks/enable-rooms/index.js ./gms-tasks-config.json",
-	"steam-upload": "node node_modules/gms-tasks/tasks/steam-upload/index.js ./gms-tasks-config.json"
+    "steam-upload": "node node_modules/gms-tasks/tasks/steam-upload/index.js ./gms-tasks-config.json"
  },
  ```
  

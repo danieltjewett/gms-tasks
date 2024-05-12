@@ -20,55 +20,55 @@ start(function(){
 function start(callback)
 {
   var steamArgs = [
-	"+login",
-	process.env.steam_username,
-	process.env.steam_password,
-	"+run_app_build",
-	resolve(config.simpleAppBuildVDF),
-	"+quit"
+  "+login",
+  process.env.steam_username,
+  process.env.steam_password,
+  "+run_app_build",
+  resolve(config.simpleAppBuildVDF),
+  "+quit"
   ];
   
   var cmd;
   switch (process.platform)
   {
-	case "win32":
-	  cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder/steamcmd.exe", steamArgs);
-	  break;
-	
-	case "darwin":
-	  cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder_osx/steamcmd.sh", steamArgs);
-	  break;
-	  
-	case "linux":
-	  cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder_linux/steamcmd.sh", steamArgs);
-	  break;
-	  
-	default:
-	  log("Unsupported OS", process.platform);
-	  break;
+    case "win32":
+      cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder/steamcmd.exe", steamArgs);
+      break;
+    
+    case "darwin":
+      cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder_osx/steamcmd.sh", steamArgs);
+      break;
+      
+    case "linux":
+      cmd = spawn(config.sdkDir + "tools/ContentBuilder/builder_linux/steamcmd.sh", steamArgs);
+      break;
+      
+    default:
+      log("Unsupported OS", process.platform);
+      break;
   }
   
   cmd.stdout.setEncoding('utf8');
   cmd.stdout.on("data", function(data) {
-	var str = data.toString();
+    var str = data.toString();
     var lines = str.split(/(\r?\n)/g);
-	log(lines.join(""));
+    log(lines.join(""));
   });
 
   cmd.stderr.setEncoding('utf8');
   cmd.stderr.on("data", function(data) {
-	var str = data.toString();
+    var str = data.toString();
     var lines = str.split(/(\r?\n)/g);
-	log(lines.join(""));
+    log(lines.join(""));
   });
 
   cmd.on('error', function(error) {
-	log("error", error);
-	return callback();
+    log("error", error);
+    return callback();
   });
 
   cmd.on("close", function(code) {
-	log("child process exited with code", code);
-	return callback();
+    log("child process exited with code", code);
+    return callback();
   });
 }

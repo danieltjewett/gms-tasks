@@ -9,26 +9,26 @@ The only main file we need to add / update is our `app.vdf` file (in the same fo
 ```
 "AppBuild"
 {
-	"AppID" "<appId>" // your AppID
-	"Desc" "" // internal description for this build
-	
-	"SetLive" "SomeBranch" // set this build live on beta branch
+  "AppID" "<appId>" // your AppID
+  "Desc" "" // internal description for this build
+  
+  "SetLive" "SomeBranch" // set this build live on beta branch
 
-	"ContentRoot" "..\build\" // root content folder, relative to location where `npm run steam-upload` is
-	"BuildOutput" ".\steam-logs\" // build output folder for build logs and build cache files.  This can be git ignored
+  "ContentRoot" "..\build\" // root content folder, relative to location where `npm run steam-upload` is
+  "BuildOutput" ".\steam-logs\" // build output folder for build logs and build cache files.  This can be git ignored
 
-	"Depots"
-	{
-		"<depotId>" // your DepotID
-		{
-			"FileMapping"
-			{
-				"LocalPath" ".\*" // This can be a full path, or a path relative to ContentRoot
-				"DepotPath" "." // This is a path relative to the install folder of your game
-				"recursive" "1" // include all subfolders
-			}
-		}
-	}
+  "Depots"
+  {
+    "<depotId>" // your DepotID
+    {
+      "FileMapping"
+      {
+        "LocalPath" ".\*" // This can be a full path, or a path relative to ContentRoot
+        "DepotPath" "." // This is a path relative to the install folder of your game
+        "recursive" "1" // include all subfolders
+      }
+    }
+  }
 }
 ```
 
