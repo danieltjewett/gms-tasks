@@ -59,7 +59,7 @@ steam_password="Password"
 
 Run `npm run steam-upload` to run a command that uploads are builds to Steam.
 
-*Note* - before running for the very first time, we should navigate to the `sdk/tools/ContentBuilder/builder/` directory and run `steamcmd.exe`.  In the prompt, run `login <username> <password>`.  This will then trigger Steam Guard to email with the code.  Type the code and then type `quit`.  We should be good to use this command now.
+*Note* - before running for the very first time, we should navigate to the `sdk/tools/ContentBuilder/builder/` directory and run `steamcmd.exe` (on a mac, follow [these steps](https://partner.steamgames.com/doc/sdk/uploading#2)).  In the prompt, run `login <username> <password>`.  This will then trigger Steam Guard to email with the code.  Type the code and then type `quit`.  We should be good to use this command now.
 
 ## Contributing
 
